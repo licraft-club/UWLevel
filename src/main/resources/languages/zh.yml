@@ -1,0 +1,3 @@
+lang:
+  load-config-error: '配置文件加载失败'
+  no-player-cache: '没有查找到玩家数据!'

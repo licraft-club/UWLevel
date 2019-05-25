@@ -1,0 +1,57 @@
+#插件基本信息和等级列表配置文件
+settings:
+  #服务器基本信息
+  server: 'Under Worlder 服务器'
+  language: 'zh'
+  #用户数据保存方式
+  storage:
+    #可选 Mysql 或者 Sqlite 两种方式
+    type: Sqlite
+    #mysql 相关配置
+    mysql:
+      username: root
+      password: ''
+      hostname: localhost:3306
+      database: minecraft
+      table-prefix: jobs_
+      verify-server-certificate: false
+      use-ssl: false
+      auto-reconnect: true
+  #自定义等级列表
+  guis:
+    #魔法祭坛gui
+    altar-gui:
+      #GUI标题
+      title: '魔法祭坛'
+      #格子数
+      size: 27
+      #升级按钮
+      upgrade:
+        display: '魔法进化'
+        lores:
+        - '当前玩家'
+  levels:
+    level1:
+      fullname: '&a低级魔人'
+      number: 1
+    level2:
+      fullname: '&a中级魔人'
+      number: 2
+    level3:
+      fullname: "&a上位魔人"
+      number: 3
+    level4:
+      fullname: "&a低级魔将"
+      number: 4
+    level5:
+      fullname: "&b中级魔将"
+      number: 5
+    level6:
+      fullname: "&b上位魔将"
+      number: 6
+    level7:
+      fullname: "&5魔导师"
+      number: 7
+    level8:
+      fullname: "&5魔王"
+      number: 8

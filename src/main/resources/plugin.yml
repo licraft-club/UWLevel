@@ -1,0 +1,26 @@
+name: UWLevel
+main: com.licrafter.mc.level.LevelPlugin
+version: 1.0.0
+author: shell
+api-version: 1.13
+website: http://mc.licrafter.com
+description: custom rpg level plugin
+depend: []
+commands:
+  levels:
+    description: levels commands
+    usage: /levels
+permissions:
+  levels.*:
+    description: Grants access to all levels commands
+    children:
+      levels.admin: true
+      levels.use.*: true
+  level.admin:
+    description: Grants access to all admin commands
+    default: op
+  level.use.*:
+    descroption: Grants access to all player commands
+    default: true
+
+
