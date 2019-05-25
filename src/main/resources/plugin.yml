@@ -5,7 +5,7 @@ author: shell
 api-version: 1.13
 website: http://mc.licrafter.com
 description: custom rpg level plugin
-depend: []
+depend: [LicraftLib]
 commands:
   levels:
     description: levels commands
