@@ -2,6 +2,8 @@ package com.licrafter.mc.level.db
 
 import com.licrafter.lib.log.BLog
 import com.licrafter.mc.level.LevelPlugin
+import com.licrafter.mc.level.models.LevelPlayer
+import org.bukkit.entity.Player
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
@@ -12,6 +14,7 @@ import java.sql.DriverManager
  * Gmail: shellljx@gmail.com
  */
 class SqliteRepository : Repository {
+
     private var connection: Connection? = null
 
     @Synchronized override fun init() {
@@ -35,13 +38,20 @@ class SqliteRepository : Repository {
                         "users(`id` INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "uuid VARCHAR(36) NOT NULL UNIQUE, " +
                         "name VARBINARY(1024), " +
-                        "level INTEGER)")
+                        "level INTEGER, " +
+                        "mobkill INTEGER)")
             }?.apply {
                 BLog.consoleMessage("&cConfig storage is null")
             }
         } catch (e: Exception) {
             BLog.consoleMessage("&cCreate Table " + LevelPlugin.levelConfig().storage?.tablePrefix + "users failed: " + e.localizedMessage)
         }
+    }
+
+    override fun getLevelPlayer(player: Player, callback: ExecutorCallback<LevelPlayer>?) {
+    }
+
+    override fun insertLevelPlayer(levelPlayer: LevelPlayer, callback: ExecutorCallback<Boolean>?) {
     }
 
     override fun save() {

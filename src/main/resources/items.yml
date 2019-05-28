@@ -1,0 +1,20 @@
+name-space-key: 'level-tools'
+books:
+  bk1:
+    persistent-data: 100
+    material: 'WRITTEN_BOOK'
+    display: '睿智之书'
+    author: '系统'
+    title: '这是一本书的title'
+    pages:
+    - '这是第一页内容'
+    - '这是第二页内容'
+    lores:
+    - '魔法祭坛祭品'
+items:
+  item1:
+    persistent-data: 200
+    material: 'REDSTONE'
+    display: '龙历石'
+    lores:
+    - '魔法祭坛祭品'

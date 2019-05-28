@@ -2,7 +2,13 @@ package com.licrafter.mc.level.db
 
 import com.licrafter.lib.log.BLog
 import com.licrafter.mc.level.LevelPlugin
+import com.licrafter.mc.level.models.LevelPlayer
 import com.zaxxer.hikari.HikariDataSource
+import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
+import java.sql.SQLException
+import java.util.*
+import javax.security.auth.login.Configuration
 
 /**
  * Created by shell on 2019/5/25.
@@ -27,7 +33,7 @@ class MysqlRepository : Repository {
             dataSource?.leakDetectionThreshold = 10000
             BLog.info(LevelPlugin.instance(), url)
             initTables()
-        }?:apply {
+        } ?: apply {
             BLog.consoleMessage("&cConfig storage is null")
         }
     }
@@ -42,14 +48,66 @@ class MysqlRepository : Repository {
                         "users(`id` int AUTO_INCREMENT PRIMARY KEY, " +
                         "uuid VARCHAR(36) NOT NULL UNIQUE, " +
                         "name VARBINARY(1024), " +
-                        "level INTEGER)")
-            }?:apply {
+                        "level INTEGER, " +
+                        "mobkill INTEGER)")
+            } ?: apply {
                 BLog.consoleMessage("&cConfig storage is null")
             }
         } catch (e: Exception) {
             BLog.consoleMessage("&cCreate Table " + LevelPlugin.levelConfig().storage?.tablePrefix + "users failed: " + e.localizedMessage)
         }
 
+    }
+
+    override fun getLevelPlayer(player: Player, callback: ExecutorCallback<LevelPlayer>?) {
+        object : BukkitRunnable() {
+            override fun run() {
+                try {
+                    dataSource?.connection?.use { connection ->
+                        connection.prepareStatement("SELECT * FROM " + LevelPlugin.levelConfig().storage?.tablePrefix + "users WHERE uuid=? OR name=?;")
+                                .use { statement ->
+                                    statement.setString(1, player.uniqueId.toString())
+                                    statement.setString(2, player.name)
+                                    val resultSet = statement.executeQuery()
+                                    if (resultSet.next()) {
+                                        val levelPlayer = LevelPlayer(
+                                                UUID.fromString(resultSet.getString("uuid")),
+                                                player.displayName,
+                                                resultSet.getInt("level"), 0)
+                                        callback?.runTask(LevelPlugin.instance(), levelPlayer)
+                                    } else {
+                                        callback?.runTask(LevelPlugin.instance(), null)
+                                    }
+                                    resultSet.close()
+                                }
+                    }
+                } catch (e: SQLException) {
+                    BLog.consoleMessage("&cGetLevelPlayer error: " + e.localizedMessage)
+                }
+            }
+        }.runTaskAsynchronously(LevelPlugin.instance())
+    }
+
+    override fun insertLevelPlayer(levelPlayer: LevelPlayer, callback: ExecutorCallback<Boolean>?) {
+        object : BukkitRunnable() {
+            override fun run() {
+                try {
+                    dataSource?.connection?.use { connection ->
+                        connection.prepareStatement("INSERT INTO ${LevelPlugin.levelConfig().storage?.tablePrefix}users(uuid, name, level, mobkill) VALUES (?,?,?,?)")?.use { statement ->
+                            statement.setString(1, levelPlayer.getUUID().toString())
+                            statement.setString(2, levelPlayer.getName())
+                            statement.setInt(3, levelPlayer.getLevel()?.number ?: 1)
+                            statement.setInt(4, levelPlayer.getMobKilled())
+                            val result = statement.executeUpdate() > 0
+                            callback?.runTask(LevelPlugin.instance(), result)
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    callback?.runTask(LevelPlugin.instance(), false)
+                }
+            }
+        }.runTaskAsynchronously(LevelPlugin.instance())
     }
 
     override fun save() {
