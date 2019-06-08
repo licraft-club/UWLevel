@@ -19,8 +19,6 @@ class ItemConfig {
     var itemMap = HashMap<String, Item>()
 
     class Book {
-        @ConfigValue(path = "persistent-data")
-        var persistentData = 0
         @ConfigValue(path = "material")
         var material = ""
         @ConfigValue(path = "display")
@@ -38,8 +36,6 @@ class ItemConfig {
     }
 
     class Item {
-        @ConfigValue(path = "persistent-data")
-        var persistentData = 0
         @ConfigValue(path = "material")
         var material = ""
         @ConfigValue(path = "display")

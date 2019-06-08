@@ -16,15 +16,15 @@ import java.util.ArrayList
  */
 class AltarGui {
 
-    fun createAltarGui(player: Player): Inventory {
-        val altarGui = LevelPlugin.levelConfig().altarGui
-        val size = altarGui!!.size
+    fun createAltarGui(player: Player): Inventory? {
+        val altarGui = LevelPlugin.altarGuiConfig()
+        val size = altarGui.size
         val title = altarGui.title
         val filler = ItemStack(Material.BLACK_STAINED_GLASS_PANE)
         val buttonFiller = ItemStack(Material.ORANGE_STAINED_GLASS_PANE)
         setupButtonFiller(buttonFiller, player)
 
-        val inventory = Bukkit.createInventory(null, size, title!!)
+        val inventory = Bukkit.createInventory(null, size, title)
         for (position in 0 until altarGui.size) {
             if (isFiller(position, altarGui.size)) {
                 inventory.setItem(position, filler)
@@ -40,8 +40,9 @@ class AltarGui {
 
         val levelPlayer = LevelPlugin.playerManager().getLevelPlayer(player)
         val itemMeta = buttonFiller.itemMeta ?: return
-        val defaultLores = LevelPlugin.levelConfig().altarGui!!.upgradeLores
-        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', LevelPlugin.levelConfig().altarGui!!.upgradeDisplay ?: ""))
+        val defaultLores = LevelPlugin.altarGuiConfig().upgradeLores
+        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', LevelPlugin.altarGuiConfig().upgradeDisplay
+                ?: ""))
 
         val lores = ArrayList<String>()
         if (levelPlayer == null) {
@@ -51,21 +52,44 @@ class AltarGui {
             val nextLevel = LevelPlugin.levelConfig().getNextLevel(level!!)
             //祭坛默认lores
             defaultLores.forEach {
-                lores.add(ChatColor.translateAlternateColorCodes('&', it.replace("{player}", player.displayName, true).
-                        replace("{level}", level.fullname ?: "", true).
-                        replace("{nextlevel}", nextLevel?.fullname ?: "已经是最大等级", true)))
+                lores.add(ChatColor.translateAlternateColorCodes('&', it.replace("{player}", player.displayName, true).replace("{level}", level.fullname
+                        ?: "", true).replace("{nextlevel}", nextLevel?.fullname ?: "已经是最大等级", true)))
             }
             //不同等级额外lores
-            level.condition?.let { condition ->
-                condition.lores.forEach { lore ->
-                    lores.add(ChatColor.translateAlternateColorCodes('&', lore.replace("{mobkill}", condition.mobkill.toString(), true).
-                            replace("{money}", condition.money.toString(), true)))
+            level.condition?.apply {
+                lores.add(ChatColor.translateAlternateColorCodes('&', "&b消耗金币: &e$money"))
+                lores.add(ChatColor.translateAlternateColorCodes('&', "&b消耗怪物灵魂(击杀): &e$mobkill"))
+                items.forEach {
+                    val itemPair = getItemNameAmountPair(it)
+                    val item = LevelPlugin.itemConfig().itemMap[itemPair.first]
+                    item?.apply {
+                        lores.add(ChatColor.translateAlternateColorCodes('&', "&b消耗魔法物品: &e$display ${itemPair.second} 个"))
+                    } ?: apply {
+                        val book = LevelPlugin.itemConfig().bookMap[itemPair.first]
+                        book?.apply {
+                            lores.add(ChatColor.translateAlternateColorCodes('&', "&b消耗魔法书: &e$display ${itemPair.second} 个"))
+                        }
+                    }
                 }
             }
         }
 
         itemMeta.lore = lores
         buttonFiller.itemMeta = itemMeta
+    }
+
+    private fun getItemNameAmountPair(itemStr: String): Pair<String, Int> {
+        val array = itemStr.split(",")
+        var itemName = array[0]
+        var itemCount = 1
+        if (array.size > 1) {
+            itemCount = try {
+                array[1].toInt()
+            } catch (e: Exception) {
+                1
+            }
+        }
+        return Pair(itemName, itemCount)
     }
 
     companion object {

@@ -8,11 +8,14 @@ import com.licrafter.mc.level.commands.TabComplete
 import com.licrafter.mc.level.db.DBManager
 import com.licrafter.mc.level.db.Repository
 import com.licrafter.mc.level.listeners.GuiListener
+import com.licrafter.mc.level.listeners.MythicMobListener
 import com.licrafter.mc.level.listeners.PlayerListener
-import com.licrafter.mc.level.models.RecipeManager
+import com.licrafter.mc.level.listeners.UWLevelListener
+import com.licrafter.mc.level.models.config.AltarGuiConfig
 import com.licrafter.mc.level.models.config.ItemConfig
 import com.licrafter.mc.level.models.config.LangConfig
 import com.licrafter.mc.level.models.config.LevelConfig
+import de.slikey.effectlib.EffectManager
 import org.bukkit.plugin.java.JavaPlugin
 
 /**
@@ -32,6 +35,9 @@ class LevelPlugin : JavaPlugin() {
         getCommand("levels")?.tabCompleter = TabComplete()
         server.pluginManager.registerEvents(GuiListener(), this)
         server.pluginManager.registerEvents(PlayerListener(), this)
+        server.pluginManager.registerEvents(MythicMobListener(), this)
+        server.pluginManager.registerEvents(UWLevelListener(), this)
+        effectManager = EffectManager(this)
         playerManager = PlayerManager()
         dbManager = DBManager()
         dbManager.startDatabase()
@@ -47,6 +53,8 @@ class LevelPlugin : JavaPlugin() {
             langConfig.saveDefaultConfig()
             val itemConfig = YmlMaker(this, "items.yml")
             itemConfig.saveDefaultConfig()
+            val altarGuiConfig = YmlMaker(this, "altarGui.yml")
+            altarGuiConfig.saveDefaultConfig()
         } catch (e: Exception) {
             BLog.warning(this, "配置文件初始化失败")
         }
@@ -56,10 +64,13 @@ class LevelPlugin : JavaPlugin() {
         langConfig = ParserAPI.instance().loadValues(this,
                 "languages/" + levelConfig.language + ".yml", LangConfig::class.java)
         itemConfig = ParserAPI.instance().loadValues(this, ItemConfig::class.java)
+        altarGuiConfig = ParserAPI.instance().loadValues(this, AltarGuiConfig::class.java)
+
     }
 
     override fun onDisable() {
         BLog.printDisableInfo(this)
+        effectManager.dispose()
     }
 
     companion object {
@@ -69,6 +80,8 @@ class LevelPlugin : JavaPlugin() {
         private lateinit var INSTANCE: LevelPlugin
         private lateinit var dbManager: DBManager
         private lateinit var playerManager: PlayerManager
+        private lateinit var effectManager: EffectManager
+        private lateinit var altarGuiConfig: AltarGuiConfig
 
         fun levelConfig(): LevelConfig {
             return levelConfig
@@ -84,6 +97,14 @@ class LevelPlugin : JavaPlugin() {
 
         fun dbManager(): DBManager {
             return dbManager
+        }
+
+        fun altarGuiConfig(): AltarGuiConfig {
+            return altarGuiConfig
+        }
+
+        fun effectManager(): EffectManager {
+            return effectManager
         }
 
         fun playerManager(): PlayerManager {

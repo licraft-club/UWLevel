@@ -15,6 +15,8 @@ class LevelsCommand : CommandExecutor {
             return GuiCmd.perform(sender, command, label, args)
         } else if (args[0].equals("join", ignoreCase = true)) {
             return JoinCmd.perform(sender, command, label, args)
+        } else if (args[0].equals("particles", ignoreCase = true)) {
+            return ParticleCmd.perform(sender, command, label, args)
         }
         return true
     }

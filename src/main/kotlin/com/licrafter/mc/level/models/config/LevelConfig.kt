@@ -20,8 +20,6 @@ class LevelConfig {
     var language: String? = null
     @ConfigSection(path = "settings.levels")
     var levelMap: HashMap<String, Level> = HashMap()
-    @ConfigSection(path = "settings.guis.altar-gui")
-    var altarGui: GUI? = null
     @ConfigSection(path = "settings.storage")
     var storage: Storage? = null
     @Nullable
@@ -40,6 +38,8 @@ class LevelConfig {
         var fullname: String? = null
         @ConfigValue(path = "number")
         var number: Int = 0
+        @ConfigValue(path = "maxHealth")
+        var maxHealth = 0
         @ConfigSection(path = "condition")
         var condition: Condition? = null
 
@@ -60,14 +60,7 @@ class LevelConfig {
     }
 
     class GUI {
-        @ConfigValue(path = "title")
-        var title: String? = null
-        @ConfigValue(path = "size")
-        var size: Int = 0
-        @ConfigValue(path = "upgrade.display")
-        var upgradeDisplay: String? = null
-        @ConfigValue(path = "upgrade.lores")
-        var upgradeLores: List<String> = arrayListOf()
+
     }
 
     class Storage {
@@ -96,8 +89,31 @@ class LevelConfig {
         var mobkill: Int = 0
         @ConfigValue(path = "money")
         var money: Int = 0
-        @ConfigValue(path = "lores")
-        var lores: List<String> = arrayListOf()
+        @ConfigValue(path = "items")
+        var items: List<String> = arrayListOf()
+
+        fun getItemAmountMap(): HashMap<String, Int> {
+            val map = HashMap<String, Int>()
+            items.forEach {
+                val pair = getItemNameAmountPair(it)
+                map[pair.first] = pair.second
+            }
+            return map
+        }
+
+        private fun getItemNameAmountPair(itemStr: String): Pair<String, Int> {
+            val array = itemStr.split(",")
+            var itemName = array[0]
+            var itemCount = 1
+            if (array.size > 1) {
+                itemCount = try {
+                    array[1].toInt()
+                } catch (e: Exception) {
+                    1
+                }
+            }
+            return Pair(itemName, itemCount)
+        }
     }
 
     @Nullable
@@ -116,5 +132,9 @@ class LevelConfig {
         } else {
             null
         }
+    }
+
+    fun isMaxLevel(level: Level?): Boolean {
+        return level != null && sortedLevels.size > 0 && sortedLevels.indexOf(level) == sortedLevels.size - 1
     }
 }

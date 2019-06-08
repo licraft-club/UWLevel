@@ -3,7 +3,9 @@ package com.licrafter.mc.level.db
 import com.licrafter.lib.log.BLog
 import com.licrafter.mc.level.LevelPlugin
 import com.licrafter.mc.level.models.LevelPlayer
+import com.licrafter.mc.level.models.config.LevelConfig
 import com.zaxxer.hikari.HikariDataSource
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 import java.sql.SQLException
@@ -18,7 +20,8 @@ import javax.security.auth.login.Configuration
 class MysqlRepository : Repository {
     private var dataSource: HikariDataSource? = null
 
-    @Synchronized override fun init() {
+    @Synchronized
+    override fun init() {
         dataSource = HikariDataSource()
         val storage = LevelPlugin.levelConfig().storage
         storage?.run {
@@ -39,7 +42,8 @@ class MysqlRepository : Repository {
     }
 
 
-    @Synchronized private fun initTables() {
+    @Synchronized
+    private fun initTables() {
         try {
             LevelPlugin.levelConfig().storage?.run {
                 val connection = dataSource?.connection
@@ -74,9 +78,9 @@ class MysqlRepository : Repository {
                                                 UUID.fromString(resultSet.getString("uuid")),
                                                 player.displayName,
                                                 resultSet.getInt("level"), 0)
-                                        callback?.runTask(LevelPlugin.instance(), levelPlayer)
+                                        callback?.runTask(levelPlayer)
                                     } else {
-                                        callback?.runTask(LevelPlugin.instance(), null)
+                                        callback?.runTask(LevelPlayer.createInvalidate())
                                     }
                                     resultSet.close()
                                 }
@@ -99,12 +103,40 @@ class MysqlRepository : Repository {
                             statement.setInt(3, levelPlayer.getLevel()?.number ?: 1)
                             statement.setInt(4, levelPlayer.getMobKilled())
                             val result = statement.executeUpdate() > 0
-                            callback?.runTask(LevelPlugin.instance(), result)
+                            callback?.runTask(result)
                         }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    callback?.runTask(LevelPlugin.instance(), false)
+                    callback?.runTask(false)
+                }
+            }
+        }.runTaskAsynchronously(LevelPlugin.instance())
+    }
+
+    override fun updateLevelPlayer(levelPlayer: LevelPlayer, nextLevel: LevelConfig.Level, callback: ExecutorCallback<Boolean>?) {
+        object : BukkitRunnable() {
+            override fun run() {
+                try {
+                    dataSource?.connection?.use { connection ->
+                        connection.prepareStatement("UPDATE ${LevelPlugin.levelConfig().storage?.tablePrefix}users SET " +
+                                "uuid=?, " +
+                                "name=?, " +
+                                "level=?, " +
+                                "mobkill=? " +
+                                "WHERE uuid=?;")?.use { statement ->
+                            statement.setString(1, levelPlayer.getUUID().toString())
+                            statement.setString(2, levelPlayer.getName().toString())
+                            statement.setInt(3, nextLevel.number)
+                            statement.setInt(4, levelPlayer.getMobKilled())
+                            statement.setString(5, levelPlayer.getUUID().toString())
+                            val result = statement.executeUpdate()
+                            callback?.runTask(result > 0)
+                        }
+                    }
+                } catch (e: Exception) {
+                    callback?.runTask(false)
+                    BLog.consoleMessage("&cMysql update levelplayer failed: " + e.localizedMessage)
                 }
             }
         }.runTaskAsynchronously(LevelPlugin.instance())

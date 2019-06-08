@@ -37,8 +37,8 @@ object JoinCmd : LevelCmdInterface {
             //还未开启魔法升级之路
             val newLevelPlayer = LevelPlayer(player.uniqueId, player.displayName, levelNum, 0)
             LevelPlugin.getRepository()?.insertLevelPlayer(newLevelPlayer, object : ExecutorCallback<Boolean>() {
-                override fun callback(value: Boolean?) {
-                    if (value != null && value == true) {
+                override fun callback(value: Boolean) {
+                    if (value) {
                         sender.sendMessage("加入了职业" + level.fullname)
                         LevelPlugin.playerManager().addLevelPlayer(newLevelPlayer)
                     }

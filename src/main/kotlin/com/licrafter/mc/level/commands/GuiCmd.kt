@@ -2,7 +2,7 @@ package com.licrafter.mc.level.commands
 
 import com.licrafter.mc.level.LevelPlugin
 import com.licrafter.mc.level.gui.AltarGui
-import com.licrafter.mc.level.models.ItemManager
+import com.licrafter.mc.level.ItemManager
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -18,11 +18,17 @@ object GuiCmd : LevelCmdInterface {
         if (sender is Player) {
             val altarGui = AltarGui()
             val inventory = altarGui.createAltarGui(sender)
-            sender.sendMessage("openddd")
+            if (inventory == null) {
+                sender.sendMessage("创建gui失败，请查看配置文件")
+                return true
+            }
             sender.openInventory(inventory)
             val item = LevelPlugin.itemConfig().bookMap["bk1"] ?: return true
-            val itemStack = ItemManager.createBook(item)
+            val book = LevelPlugin.itemConfig().itemMap["item1"] ?: return true
+            val itemStack = ItemManager.createBook("bk1", item)
+            val itemStack2 = ItemManager.createItem("item1", book)
             sender.inventory.addItem(itemStack)
+            sender.inventory.addItem(itemStack2)
         }
         return true
     }

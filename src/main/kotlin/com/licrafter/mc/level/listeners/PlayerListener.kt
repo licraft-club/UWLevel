@@ -3,9 +3,12 @@ package com.licrafter.mc.level.listeners
 import com.licrafter.lib.log.BLog
 import com.licrafter.mc.level.LevelPlugin
 import com.licrafter.mc.level.db.ExecutorCallback
+import com.licrafter.mc.level.events.LevelPlayerLoadedEvent
+import com.licrafter.mc.level.events.UWLevelChangedEvent
+import com.licrafter.mc.level.events.UWLevelUpEvent
 import com.licrafter.mc.level.models.LevelPlayer
-import com.licrafter.mc.level.models.ItemManager
-import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent
+import org.bukkit.*
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.EventHandler
@@ -16,6 +19,9 @@ import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerMoveEvent
+import org.bukkit.inventory.ItemStack
+import org.fusesource.jansi.Ansi
 
 /**
  * Created by shell on 2019/5/26.
@@ -29,10 +35,13 @@ class PlayerListener : Listener {
         val player = event.player
         //todo filter disable world
         LevelPlugin.dbManager().getRepository()?.getLevelPlayer(player, object : ExecutorCallback<LevelPlayer>() {
-            override fun callback(value: LevelPlayer?) {
-                value?.let { levelPlayer ->
-                    LevelPlugin.playerManager().addLevelPlayer(levelPlayer)
-                } ?: apply {
+            override fun callback(value: LevelPlayer) {
+                if (!value.invalidate()) {
+                    LevelPlugin.playerManager().addLevelPlayer(value)
+                    val loadedEvent = LevelPlayerLoadedEvent(player, value)
+                    Bukkit.getServer().pluginManager.callEvent(loadedEvent)
+                    BLog.info(LevelPlugin.instance(), "LevelPlayer ${player.displayName} load success!")
+                } else {
                     BLog.info(LevelPlugin.instance(), "no level player: ${player.displayName} join game!")
                 }
             }
@@ -66,18 +75,16 @@ class PlayerListener : Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    fun onMythicMobDeath(event: MythicMobDeathEvent) {
-        if (event.mobType.internalName.equals("SkeletalKnight", true)) {
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onCraftItem(event: CraftItemEvent) {
-
+        System.out.println(event.click)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun prepareCraftItem(event: PrepareItemCraftEvent) {
+        System.out.println(event.isRepair)
+    }
 
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    fun onPlayerMove(event: PlayerMoveEvent) {
     }
 }

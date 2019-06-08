@@ -6,14 +6,14 @@ settings:
   #用户数据保存方式
   storage:
     #可选 Mysql 或者 Sqlite 两种方式
-    type: mysql
+    type: sqlite
     #mysql 相关配置
     mysql:
       username: root
       password: '12345678'
       hostname: localhost:3306
       database: minecraft
-      table-prefix: jobs_
+      table-prefix: levels_
       verify-server-certificate: false
       use-ssl: false
       auto-reconnect: true
@@ -21,89 +21,85 @@ settings:
   guis:
     #魔法祭坛gui
     altar-gui:
-      #GUI标题
-      title: '魔法祭坛'
-      #格子数
-      size: 27
-      #升级按钮
-      upgrade:
-        display: '触发魔法进化'
-        lores:
-        - '当前玩家:{player}'
-        - '当前等级:{level}'
-        - '================='
-        - '下一等级:{nextlevel}'
-        - '升级到下一等级需要以下物品'
+
   levels:
     level1:
       fullname: '&a低级魔人'
       number: 1
+      maxHealth: 30
       condition:
         mobkill: 5
         money: 10
-        lores:
-        - '消耗怪物灵魂(击杀): {mobkill} 个'
-        - '消耗金币数量: {money}'
+        items:
+        - item1,2
+        - bk1,2
     level2:
       fullname: '&a中级魔人'
       number: 2
+      maxHealth: 30
       condition:
         mobkill: 10
         money: 20
-        lores:
-        - '消耗怪物灵魂(击杀): {mobkill} 个'
-        - '消耗金币数量: {money}'
+        items:
+        - item1,2
+        - bk1,2
     level3:
       fullname: "&a上位魔人"
+      maxHealth: 30
       number: 3
       condition:
         mobkill: 15
         money: 30
-        lores:
-        - '消耗怪物灵魂(击杀): {mobkill} 个'
-        - '消耗金币数量: {money}'
+        items:
+        - item1,2
+        - bk1,2
     level4:
       fullname: "&a低级魔将"
       number: 4
+      maxHealth: 30
       condition:
         mobkill: 20
         money: 40
-        lores:
-        - '消耗怪物灵魂(击杀): {mobkill} 个'
-        - '消耗金币数量: {money}'
+        items:
+        - item1,2
+        - bk1,2
     level5:
       fullname: "&b中级魔将"
       number: 5
+      maxHealth: 30
       condition:
         mobkill: 25
         money: 50
-        lores:
-        - '消耗怪物灵魂(击杀): {mobkill} 个'
-        - '消耗金币数量: {money}'
+        items:
+        - item1,2
+        - bk1,2
     level6:
       fullname: "&b上位魔将"
       number: 6
+      maxHealth: 30
       condition:
         mobkill: 30
         money: 60
-        lores:
-        - '消耗怪物灵魂(击杀): {mobkill} 个'
-        - '消耗金币数量: {money}'
+        items:
+        - item1,2
+        - bk1,2
     level7:
       fullname: "&5魔导师"
       number: 7
+      maxHealth: 30
       condition:
         mobkill: 35
         money: 70
-        lores:
-        - '消耗怪物灵魂(击杀): {mobkill} 个'
-        - '消耗金币数量: {money}'
+        items:
+        - item1,2
+        - bk1,2
     level8:
       fullname: "&5魔王"
       number: 8
+      maxHealth: 30
       condition:
         mobkill: 40
         money: 80
-        lores:
-        - '消耗怪物灵魂(击杀): {mobkill} 个'
-        - '消耗金币数量: {money}'
+        items:
+        - item1,2
+        - bk1,2
