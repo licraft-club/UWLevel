@@ -11,8 +11,6 @@ import com.licraft.apt.config.ConfigValue
  */
 @ConfigBean(file = "items.yml")
 class ItemConfig {
-    @ConfigValue(path = "name-space-key")
-    var nameSpaceKey = ""
     @ConfigSection(path = "books")
     var bookMap = HashMap<String, Book>()
     @ConfigSection(path = "items")
@@ -36,8 +34,8 @@ class ItemConfig {
     }
 
     class Item {
-        @ConfigValue(path = "material")
-        var material = ""
+        @ConfigValue(path = "value")
+        var value = ""
         @ConfigValue(path = "display")
         var display = ""
         @ConfigValue(path = "amount")

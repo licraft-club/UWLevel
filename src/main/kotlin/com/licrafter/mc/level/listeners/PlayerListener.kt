@@ -9,6 +9,8 @@ import com.licrafter.mc.level.events.UWLevelUpEvent
 import com.licrafter.mc.level.models.LevelPlayer
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
+import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Mob
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.EventHandler
@@ -37,6 +39,7 @@ class PlayerListener : Listener {
         LevelPlugin.dbManager().getRepository()?.getLevelPlayer(player, object : ExecutorCallback<LevelPlayer>() {
             override fun callback(value: LevelPlayer) {
                 if (!value.invalidate()) {
+                    value.setActive()
                     LevelPlugin.playerManager().addLevelPlayer(value)
                     val loadedEvent = LevelPlayerLoadedEvent(player, value)
                     Bukkit.getServer().pluginManager.callEvent(loadedEvent)
@@ -72,6 +75,7 @@ class PlayerListener : Listener {
         }
         val levelPlayer = LevelPlugin.playerManager().getLevelPlayer(killer.uniqueId) ?: return
         levelPlayer.addMobkilled(1)
+        killer.sendMessage("获得怪物灵魂+" + 1)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -86,5 +90,18 @@ class PlayerListener : Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onPlayerMove(event: PlayerMoveEvent) {
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    fun onPlayerAttacked(event: EntityDamageByEntityEvent) {
+        if (event.entity is Player) {
+            val player = event.entity as Player
+            player.sendMessage(event.damager.name + "造成伤害: " + event.damage)
+        }
+        if (event.damager is Player && event.entity is Mob) {
+            val player = event.damager as Player
+            val mob = event.entity as Mob
+            player.sendMessage("造成伤害: " + event.damage + " 血量: " + mob.health)
+        }
     }
 }

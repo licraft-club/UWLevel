@@ -17,16 +17,39 @@ settings:
       verify-server-certificate: false
       use-ssl: false
       auto-reconnect: true
+  prefixs:
+    "1":
+      fullname: '&a魔人'
+      mixlevel: 1
+    "2":
+      fullname: '&a中级魔人'
+      mixlevel: 3
+    "3":
+      fullname: '&a高级魔人'
+      mixlevel: 6
+    "4":
+      fullname: '&a魔将'
+      mixlevel: 10
+    "5":
+      fullname: '&a中位魔将'
+      mixlevel: 15
+    "6":
+      fullname: '&a上位魔将'
+      mixlevel: 20
+    "7":
+      fullname: '&a原初之红'
+      mixlevel: 25
+    "8":
+      fullname: '&a魔王'
+      mixlevel: 30
   #自定义等级列表
-  guis:
-    #魔法祭坛gui
-    altar-gui:
-
   levels:
     level1:
-      fullname: '&a低级魔人'
+      fullname:
       number: 1
       maxHealth: 30
+      particles:
+      - HEART
       condition:
         mobkill: 5
         money: 10
@@ -34,9 +57,10 @@ settings:
         - item1,2
         - bk1,2
     level2:
-      fullname: '&a中级魔人'
       number: 2
       maxHealth: 30
+      particles:
+      - FIREWORKS_SPARK
       condition:
         mobkill: 10
         money: 20
@@ -44,9 +68,10 @@ settings:
         - item1,2
         - bk1,2
     level3:
-      fullname: "&a上位魔人"
       maxHealth: 30
       number: 3
+      particles:
+      - FIREWORKS_SPARK
       condition:
         mobkill: 15
         money: 30
@@ -54,9 +79,10 @@ settings:
         - item1,2
         - bk1,2
     level4:
-      fullname: "&a低级魔将"
       number: 4
       maxHealth: 30
+      particles:
+      - COMPOSTER
       condition:
         mobkill: 20
         money: 40
@@ -64,9 +90,10 @@ settings:
         - item1,2
         - bk1,2
     level5:
-      fullname: "&b中级魔将"
       number: 5
       maxHealth: 30
+      particles:
+      - SMOKE_LARGE
       condition:
         mobkill: 25
         money: 50
@@ -74,9 +101,10 @@ settings:
         - item1,2
         - bk1,2
     level6:
-      fullname: "&b上位魔将"
       number: 6
       maxHealth: 30
+      particles:
+      - CLOUD
       condition:
         mobkill: 30
         money: 60
@@ -84,9 +112,10 @@ settings:
         - item1,2
         - bk1,2
     level7:
-      fullname: "&5魔导师"
       number: 7
       maxHealth: 30
+      particles:
+      - DRAGON_BREATH
       condition:
         mobkill: 35
         money: 70
@@ -94,9 +123,10 @@ settings:
         - item1,2
         - bk1,2
     level8:
-      fullname: "&5魔王"
       number: 8
       maxHealth: 30
+      particles:
+      - DRIP_WATER
       condition:
         mobkill: 40
         money: 80

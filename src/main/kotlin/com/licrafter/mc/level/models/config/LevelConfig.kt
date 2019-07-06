@@ -18,6 +18,8 @@ class LevelConfig {
     var server: String? = null
     @ConfigValue(path = "settings.language")
     var language: String? = null
+    @ConfigSection(path = "settings.prefixs")
+    var prefixMap = HashMap<String, Prefix>()
     @ConfigSection(path = "settings.levels")
     var levelMap: HashMap<String, Level> = HashMap()
     @ConfigSection(path = "settings.storage")
@@ -34,12 +36,12 @@ class LevelConfig {
 
     class Level : Comparable<Level> {
 
-        @ConfigValue(path = "fullname")
-        var fullname: String? = null
         @ConfigValue(path = "number")
         var number: Int = 0
         @ConfigValue(path = "maxHealth")
         var maxHealth = 0
+        @ConfigValue(path = "particles")
+        var particles = arrayListOf<String>()
         @ConfigSection(path = "condition")
         var condition: Condition? = null
 
@@ -55,12 +57,19 @@ class LevelConfig {
         }
 
         override fun hashCode(): Int {
-            return (fullname ?: "").hashCode() + number.hashCode()
+            return ("level_$number").hashCode()
         }
     }
 
-    class GUI {
+    class Prefix : Comparable<Prefix> {
+        override fun compareTo(other: Prefix): Int {
+            return this.mixlevel - other.mixlevel
+        }
 
+        @ConfigValue(path = "fullname")
+        var fullname = ""
+        @ConfigValue(path = "mixlevel")
+        var mixlevel = -1
     }
 
     class Storage {
@@ -119,6 +128,17 @@ class LevelConfig {
     @Nullable
     fun getLevel(number: Int): Level? {
         return levelMap.values.firstOrNull { it.number == number }
+    }
+
+    fun getLevelPrefix(level: Level?): Prefix? {
+        level ?: return null
+        var mixPrefix: Prefix? = null
+        for (prefix in prefixMap.values) {
+            if (level.number >= prefix.mixlevel && (mixPrefix == null || mixPrefix.mixlevel < prefix.mixlevel)) {
+                mixPrefix = prefix
+            }
+        }
+        return mixPrefix
     }
 
     fun isTheLastLevel(level: Level): Boolean {

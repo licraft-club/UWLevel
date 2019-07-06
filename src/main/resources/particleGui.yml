@@ -1,0 +1,34 @@
+types:
+  FLAME:
+    name: '火焰'
+    material: BOOK
+  HEART:
+    name: '爱心'
+    material: BOOK
+  FIREWORKS_SPARK:
+    name: '烟火'
+    material: BOOK
+  COMPOSTER:
+    name: '堆肥'
+    material: BOOK
+  SMOKE_LARGE:
+    name: '烟雾'
+    material: BOOK
+  CLOUD:
+    name: '云朵'
+    material: BOOK
+  DRAGON_BREATH:
+    name: '龙息'
+    material: BOOK
+  DRIP_WATER:
+    name: '雨水'
+    material: BOOK
+  NOTE:
+    name: '音符'
+    material: BOOK
+  SPELL:
+    name: '螺旋'
+    material: BOOK
+  TOTEM:
+    name: '图腾'
+    material: BOOK

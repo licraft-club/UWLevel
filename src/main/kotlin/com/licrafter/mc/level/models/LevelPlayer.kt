@@ -17,6 +17,11 @@ class LevelPlayer(private val uuid: UUID?, private val name: String?, private va
     private var level = LevelPlugin.levelConfig().getLevel(levelNumber)
     //running particles effect currently
     private var runningEffect: Effect? = null
+    private var levelPrefix: LevelConfig.Prefix? = null
+
+    init {
+        levelPrefix = LevelPlugin.levelConfig().getLevelPrefix(level)
+    }
 
     fun getName(): String? {
         return name
@@ -28,6 +33,10 @@ class LevelPlayer(private val uuid: UUID?, private val name: String?, private va
 
     fun getLevel(): LevelConfig.Level? {
         return level
+    }
+
+    fun getLevelPrefix(): LevelConfig.Prefix? {
+        return levelPrefix
     }
 
     fun getMobKilled(): Int {
@@ -63,6 +72,9 @@ class LevelPlayer(private val uuid: UUID?, private val name: String?, private va
 
     fun upGrade(nextLevel: LevelConfig.Level) {
         level = nextLevel
+    }
+
+    fun setActive() {
     }
 
     fun invalidate(): Boolean {

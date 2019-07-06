@@ -39,7 +39,7 @@ object JoinCmd : LevelCmdInterface {
             LevelPlugin.getRepository()?.insertLevelPlayer(newLevelPlayer, object : ExecutorCallback<Boolean>() {
                 override fun callback(value: Boolean) {
                     if (value) {
-                        sender.sendMessage("加入了职业" + level.fullname)
+                        sender.sendMessage("加入了职业" + newLevelPlayer.getLevelPrefix()?.fullname)
                         LevelPlugin.playerManager().addLevelPlayer(newLevelPlayer)
                     }
                 }

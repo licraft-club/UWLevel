@@ -11,10 +11,7 @@ import com.licrafter.mc.level.listeners.GuiListener
 import com.licrafter.mc.level.listeners.MythicMobListener
 import com.licrafter.mc.level.listeners.PlayerListener
 import com.licrafter.mc.level.listeners.UWLevelListener
-import com.licrafter.mc.level.models.config.AltarGuiConfig
-import com.licrafter.mc.level.models.config.ItemConfig
-import com.licrafter.mc.level.models.config.LangConfig
-import com.licrafter.mc.level.models.config.LevelConfig
+import com.licrafter.mc.level.models.config.*
 import de.slikey.effectlib.EffectManager
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -42,6 +39,7 @@ class LevelPlugin : JavaPlugin() {
         dbManager = DBManager()
         dbManager.startDatabase()
         RecipeManager.injectRecipe()
+        particleManager = ParticleManager()
     }
 
     private fun initConfig() {
@@ -55,6 +53,8 @@ class LevelPlugin : JavaPlugin() {
             itemConfig.saveDefaultConfig()
             val altarGuiConfig = YmlMaker(this, "altarGui.yml")
             altarGuiConfig.saveDefaultConfig()
+            val particleConfig = YmlMaker(this, "particleGui.yml")
+            particleConfig.saveDefaultConfig()
         } catch (e: Exception) {
             BLog.warning(this, "配置文件初始化失败")
         }
@@ -65,6 +65,7 @@ class LevelPlugin : JavaPlugin() {
                 "languages/" + levelConfig.language + ".yml", LangConfig::class.java)
         itemConfig = ParserAPI.instance().loadValues(this, ItemConfig::class.java)
         altarGuiConfig = ParserAPI.instance().loadValues(this, AltarGuiConfig::class.java)
+        particleGuiConfig = ParserAPI.instance().loadValues(this, ParticleGuiConfig::class.java)
 
     }
 
@@ -77,11 +78,13 @@ class LevelPlugin : JavaPlugin() {
         private lateinit var levelConfig: LevelConfig
         private lateinit var langConfig: LangConfig
         private lateinit var itemConfig: ItemConfig
+        private lateinit var particleGuiConfig: ParticleGuiConfig
         private lateinit var INSTANCE: LevelPlugin
         private lateinit var dbManager: DBManager
         private lateinit var playerManager: PlayerManager
         private lateinit var effectManager: EffectManager
         private lateinit var altarGuiConfig: AltarGuiConfig
+        private lateinit var particleManager: ParticleManager
 
         fun levelConfig(): LevelConfig {
             return levelConfig
@@ -103,12 +106,20 @@ class LevelPlugin : JavaPlugin() {
             return altarGuiConfig
         }
 
+        fun particleGuiConfig(): ParticleGuiConfig {
+            return particleGuiConfig
+        }
+
         fun effectManager(): EffectManager {
             return effectManager
         }
 
         fun playerManager(): PlayerManager {
             return playerManager
+        }
+
+        fun particleManager(): ParticleManager {
+            return particleManager
         }
 
         fun getRepository(): Repository? {

@@ -1,8 +1,10 @@
 package com.licrafter.mc.level.commands
 
+import com.licrafter.mc.skills.UWSkill
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 
 /**
  * Created by shell on 2019/5/25.
@@ -17,6 +19,8 @@ class LevelsCommand : CommandExecutor {
             return JoinCmd.perform(sender, command, label, args)
         } else if (args[0].equals("particles", ignoreCase = true)) {
             return ParticleCmd.perform(sender, command, label, args)
+        } else if (args[0] == "skill") {
+            UWSkill.start(sender as Player)
         }
         return true
     }

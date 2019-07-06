@@ -32,6 +32,9 @@ class GuiListener : Listener {
         val player = event.whoClicked as Player
         val invName = player.openInventory.title
         val altarGui = LevelPlugin.altarGuiConfig()
+        if (invName != altarGui.title) {
+            return
+        }
         //打开了魔法祭台&&操作top背包&&是填充区域
         if (invName == altarGui.title && clickInv.size == altarGui.size
                 && AltarGui.isFiller(event.rawSlot, altarGui.size)) {
@@ -57,14 +60,13 @@ class GuiListener : Listener {
             val putItemMap = HashMap<String, Int>()
             //需要的物品名和数量
             val needItemMap = HashMap<String, Int>()
-            val key = NamespacedKey(LevelPlugin.instance(), LevelPlugin.itemConfig().nameSpaceKey)
             for (index in 0 until event.inventory.size) {
                 if (AltarGui.isFiller(index, altarGui.size)) {
                     continue
                 }
                 val item = event.inventory.getItem(index) ?: continue
                 val itemmeta = item.itemMeta ?: continue
-                val tagValue = itemmeta.persistentDataContainer.get(key, PersistentDataType.STRING) ?: return
+                val tagValue = itemmeta.lore?.last() ?: return
                 putItemMap[tagValue] = (putItemMap[tagValue] ?: 0).plus(item.amount)
             }
             var canLevelUp = true
@@ -92,7 +94,7 @@ class GuiListener : Listener {
                     }
                     val item = event.inventory.getItem(index) ?: continue
                     val itemmeta = item.itemMeta ?: continue
-                    val tagValue = itemmeta.persistentDataContainer.get(key, PersistentDataType.STRING) ?: return
+                    val tagValue = itemmeta.lore?.last() ?: return
                     val needAmount = needItemMap[tagValue] ?: continue
                     when {
                         needAmount > item.amount -> {

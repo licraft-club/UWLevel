@@ -52,8 +52,9 @@ class AltarGui {
             val nextLevel = LevelPlugin.levelConfig().getNextLevel(level!!)
             //祭坛默认lores
             defaultLores.forEach {
-                lores.add(ChatColor.translateAlternateColorCodes('&', it.replace("{player}", player.displayName, true).replace("{level}", level.fullname
-                        ?: "", true).replace("{nextlevel}", nextLevel?.fullname ?: "已经是最大等级", true)))
+                val prefix = levelPlayer.getLevelPrefix()?.fullname
+                lores.add(ChatColor.translateAlternateColorCodes('&', it.replace("{player}", player.displayName, true).replace("{level}", prefix
+                        ?: "", true)))
             }
             //不同等级额外lores
             level.condition?.apply {

@@ -26,8 +26,11 @@ object ParticleCmd : LevelCmdInterface {
                 levelPlayer.stopParticleEffect()
                 return true
             }
-            val effect = ParticleManager.createTrackEffect(Particle.HEART, sender)
-            levelPlayer.runParticleEffect(effect)
+            val level = levelPlayer.getLevel() ?: return true
+            val effect = LevelPlugin.particleManager().createTrackEffect(level.particles[0], sender)
+            effect?.let {
+                levelPlayer.runParticleEffect(it)
+            }
         } else {
             sender.sendMessage("只有玩家可以执行")
         }
