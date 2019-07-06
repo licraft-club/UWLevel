@@ -9,10 +9,7 @@ import com.licrafter.mc.level.events.UWLevelUpEvent
 import com.licrafter.mc.level.models.LevelPlayer
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
-import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Mob
-import org.bukkit.entity.Player
-import org.bukkit.entity.Projectile
+import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -24,6 +21,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.ItemStack
 import org.fusesource.jansi.Ansi
+import java.util.*
 
 /**
  * Created by shell on 2019/5/26.
@@ -70,6 +68,15 @@ class PlayerListener : Listener {
             damager
         } else if (damager is Projectile && damager.shooter is Player) {
             damager.shooter as Player
+        } else if (damager is Firework) {
+            //skill has firework explode
+            try {
+                val display = damager.fireworkMeta.displayName
+                val mageUUID = UUID.fromString(display)
+                LevelPlugin.instance().server.getPlayer(mageUUID) ?: return
+            } catch (e: IllegalArgumentException) {
+                return
+            }
         } else {
             return
         }
@@ -102,6 +109,14 @@ class PlayerListener : Listener {
             val player = event.damager as Player
             val mob = event.entity as Mob
             player.sendMessage("造成伤害: " + event.damage + " 血量: " + mob.health)
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    fun onLevelSkillFireworkDamage(event: EntityDamageByEntityEvent) {
+        val damager = event.damager
+        if (damager is Firework && damager.fireworkMeta.displayName == "level_skill") {
+            event.isCancelled = true
         }
     }
 }

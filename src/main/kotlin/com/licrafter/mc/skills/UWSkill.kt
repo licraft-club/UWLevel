@@ -13,7 +13,7 @@ object UWSkill {
 
     val nearbyEntities = arrayListOf<Entity>()
     var blockIterator: BlockIterator? = null
-    val targetRange = 30.0
+    val targetRange = 10.0
 
     fun start(player: Player) {
         val sourceLocation = player.location
@@ -24,9 +24,13 @@ object UWSkill {
         val targetEntity = findTarget(player)
 
         val targetLocation = targetEntity?.let { getBoxCenterLocation(it.world, it.boundingBox) }
-                ?: targetBlock?.let { getBoxCenterLocation(it.world, it.boundingBox) } ?: return
-        if (targetLocation.x == 0.0 && targetLocation.y == 0.0 && targetLocation.z == 0.0) {
+                ?: targetBlock?.let { getBoxCenterLocation(it.world, it.boundingBox) }
+        if (targetLocation == null || targetLocation.x == 0.0 && targetLocation.y == 0.0 && targetLocation.z == 0.0) {
             player.sendMessage("miss target")
+            return
+        }
+        if (targetLocation.distance(projectileLocation) <= 3) {
+            player.sendMessage("too close!")
             return
         }
         val direction = targetLocation.toVector().subtract(projectileLocation.toVector()).normalize().multiply(0.5)
@@ -42,6 +46,8 @@ object UWSkill {
         }
         val firework = player.world.spawn(targetLocation, Firework::class.java)
         val fireworkMeta = firework.fireworkMeta
+        //用来标记技能触发者
+        fireworkMeta.setDisplayName("level_skill")
         fireworkMeta.addEffect(FireworkEffect.builder()
                 .flicker(false)
                 .trail(false)
@@ -51,11 +57,12 @@ object UWSkill {
                 .build())
         firework.fireworkMeta = fireworkMeta
         firework.detonate()
-        player.spawnParticle(Particle.EXPLOSION_LARGE, targetLocation, 1, 0.3, 0.3, 0.3)
+        player.spawnParticle(Particle.EXPLOSION_LARGE, targetLocation, 1, 0.3, 1.0, 0.3)
         player.playSound(sourceLocation, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
         nearbyEntities.filter { it is Player }.forEach {
             (it as Player).playSound(sourceLocation, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
         }
+
     }
 
     fun getBoxCenterLocation(world: World, boundingBox: BoundingBox): Location {
