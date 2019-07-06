@@ -51,6 +51,7 @@ object UWSkill {
                 .build())
         firework.fireworkMeta = fireworkMeta
         firework.detonate()
+        player.spawnParticle(Particle.EXPLOSION_LARGE, targetLocation, 1, 0.3, 0.3, 0.3)
         player.playSound(sourceLocation, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
         nearbyEntities.filter { it is Player }.forEach {
             (it as Player).playSound(sourceLocation, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
