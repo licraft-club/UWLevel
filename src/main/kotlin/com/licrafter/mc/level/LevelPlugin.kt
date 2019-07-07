@@ -12,6 +12,7 @@ import com.licrafter.mc.level.listeners.MythicMobListener
 import com.licrafter.mc.level.listeners.PlayerListener
 import com.licrafter.mc.level.listeners.UWLevelListener
 import com.licrafter.mc.level.models.config.*
+import com.licrafter.mc.skills.CompatibilityUtils
 import de.slikey.effectlib.EffectManager
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -40,6 +41,7 @@ class LevelPlugin : JavaPlugin() {
         dbManager.startDatabase()
         RecipeManager.injectRecipe()
         particleManager = ParticleManager()
+        CompatibilityUtils.initialize()
     }
 
     private fun initConfig() {
