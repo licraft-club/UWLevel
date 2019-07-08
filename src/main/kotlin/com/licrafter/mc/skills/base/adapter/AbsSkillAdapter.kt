@@ -12,13 +12,14 @@ abstract class AbsSkillAdapter<T : AbsSkillAdapter<T>> : ISkillAdapter {
 
     final override fun start() {
         var childResult = onStart()
-        if (childResult) {
-            return
-        }
-        mChildAdapters?.forEach {
-            childResult = it.onStart() || childResult
-            if (childResult) {
-                return
+        if (!childResult) {
+            mChildAdapters?.apply {
+                for (adapter in this) {
+                    childResult = adapter.onStart() || childResult
+                    if (childResult) {
+                        break
+                    }
+                }
             }
         }
         release()

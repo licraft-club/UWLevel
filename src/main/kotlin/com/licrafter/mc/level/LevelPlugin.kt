@@ -12,7 +12,8 @@ import com.licrafter.mc.level.listeners.MythicMobListener
 import com.licrafter.mc.level.listeners.PlayerListener
 import com.licrafter.mc.level.listeners.UWLevelListener
 import com.licrafter.mc.level.models.config.*
-import com.licrafter.mc.skills.CompatibilityUtils
+import com.licrafter.mc.skills.UWSkill
+import com.licrafter.mc.skills.base.context.SkillController
 import de.slikey.effectlib.EffectManager
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -41,7 +42,9 @@ class LevelPlugin : JavaPlugin() {
         dbManager.startDatabase()
         RecipeManager.injectRecipe()
         particleManager = ParticleManager()
-        CompatibilityUtils.initialize()
+        skillController = SkillController(this)
+        skillController.setup()
+        server.messenger
     }
 
     private fun initConfig() {
@@ -87,6 +90,7 @@ class LevelPlugin : JavaPlugin() {
         private lateinit var effectManager: EffectManager
         private lateinit var altarGuiConfig: AltarGuiConfig
         private lateinit var particleManager: ParticleManager
+        private lateinit var skillController: SkillController
 
         fun levelConfig(): LevelConfig {
             return levelConfig
@@ -122,6 +126,10 @@ class LevelPlugin : JavaPlugin() {
 
         fun particleManager(): ParticleManager {
             return particleManager
+        }
+
+        fun skillController(): SkillController {
+            return skillController
         }
 
         fun getRepository(): Repository? {

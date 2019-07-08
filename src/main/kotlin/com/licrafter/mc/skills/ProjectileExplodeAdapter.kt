@@ -36,16 +36,17 @@ class ProjectileExplodeAdapter : SkillDefaultAdapter() {
 
     private fun doDamageAction(mob: LivingEntity, damage: Double, trueDamage: Boolean) {
         val skillParams = getSkillParams() ?: return
+        val mage = skillParams.mage.getPlayer() ?: return
         if (trueDamage) {
-            UWSkill.trueDamage(skillParams.mage, mob, damage, skillParams.skill)
+            UWSkill.trueDamage(mage, mob, damage, skillParams.skill)
         } else {
-            UWSkill.damage(skillParams.mage, skillParams.skill, mob, damage)
+            UWSkill.damage(mage, skillParams.skill, mob, damage)
         }
     }
 
     private fun doPushAction(mob: Entity, center: Location) {
         var vector = mob.location.subtract(center).toVector()
-        if (vector.lengthSquared() == 0.0){
+        if (vector.lengthSquared() == 0.0) {
             vector = center.toVector().normalize().multiply(-1)
         }
         vector.multiply(1 / vector.lengthSquared())

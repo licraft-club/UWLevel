@@ -12,19 +12,32 @@ import java.util.*
 class SkillRootAdapter : SkillDefaultAdapter() {
 
     private var mSkillController: SkillController? = null
+    private var mSkillParams: SkillParams? = null
+    private var mRunning = false
+
+    override fun onStart(): Boolean {
+        mRunning = true
+        return super.onStart()
+    }
 
     override fun getSkillParams(): SkillParams? {
-        return mParentAdapter?.getSkillParams() ?: run {
-            getSkillController()?.getSkillParams()
-        }
+        return mParentAdapter?.getSkillParams() ?: mSkillParams
     }
 
     override fun getSkillController(): SkillController? {
         return mParentAdapter?.getSkillController() ?: mSkillController
     }
 
+    fun isRunning(): Boolean {
+        return mRunning
+    }
+
     fun setSkillController(controller: SkillController) {
         this.mSkillController = controller
+    }
+
+    fun setSkillParams(params: SkillParams) {
+        this.mSkillParams = params
     }
 
     override fun attach(adapter: SkillDefaultAdapter): AbsSkillAdapter<SkillDefaultAdapter> {
@@ -37,6 +50,7 @@ class SkillRootAdapter : SkillDefaultAdapter() {
     }
 
     override fun onRelease() {
+        mRunning = false
         mParentAdapter?.onRelease() ?: mSkillController?.release()
     }
 }

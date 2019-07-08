@@ -21,7 +21,7 @@ class ProjectileAdapter : SkillDefaultAdapter() {
 
     override fun onStart(): Boolean {
         val skillParams = getSkillParams() ?: return false
-        val mage = skillParams.mage
+        val mage = skillParams.mage.getPlayer() ?: return false
         val sourceLocation = mage.location
         val projectileLocation = mage.location.add(0.0, 1.0, 0.0)
         val targetBlock = findTargetBlock(mage.eyeLocation, skillParams.skillRange.toInt())
