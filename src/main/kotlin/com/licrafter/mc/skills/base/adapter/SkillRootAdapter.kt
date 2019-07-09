@@ -2,7 +2,6 @@ package com.licrafter.mc.skills.base.adapter
 
 import com.licrafter.mc.skills.base.context.SkillController
 import com.licrafter.mc.skills.base.context.SkillParams
-import java.util.*
 
 /**
  * Created by shell on 2019/7/7.
@@ -38,15 +37,6 @@ class SkillRootAdapter : SkillDefaultAdapter() {
 
     fun setSkillParams(params: SkillParams) {
         this.mSkillParams = params
-    }
-
-    override fun attach(adapter: SkillDefaultAdapter): AbsSkillAdapter<SkillDefaultAdapter> {
-        if (mChildAdapters == null) {
-            mChildAdapters = LinkedList()
-        }
-        mChildAdapters?.add(adapter)
-        adapter.setParentAapter(this)
-        return this
     }
 
     override fun onRelease() {

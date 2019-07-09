@@ -1,4 +1,4 @@
-package com.licrafter.mc.skills
+package com.licrafter.mc.skills.adapters
 
 import com.licrafter.mc.level.LevelPlugin
 import com.licrafter.mc.skills.base.adapter.SkillDefaultAdapter

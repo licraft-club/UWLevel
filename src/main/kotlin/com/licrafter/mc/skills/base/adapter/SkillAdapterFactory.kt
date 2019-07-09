@@ -9,12 +9,15 @@ class SkillAdapterFactory {
 
     class AdapterChainBuilder {
         private var root: SkillDefaultAdapter? = null
+        private var last: SkillDefaultAdapter? = null
 
         fun put(adapter: SkillDefaultAdapter): AdapterChainBuilder {
             if (root == null) {
                 root = adapter
+                last = adapter
             } else {
-                root?.attach(adapter)
+                last?.attach(adapter)
+                last = adapter
             }
             return this
         }

@@ -8,27 +8,17 @@ package com.licrafter.mc.skills.base.adapter
 abstract class AbsSkillAdapter<T : AbsSkillAdapter<T>> : ISkillAdapter {
     protected var mChildAdapter: T? = null
     protected var mParentAdapter: T? = null
-    protected var mChildAdapters: MutableCollection<T>? = null
 
     final override fun start() {
-        var childResult = onStart()
-        if (!childResult) {
-            mChildAdapters?.apply {
-                for (adapter in this) {
-                    childResult = adapter.onStart() || childResult
-                    if (childResult) {
-                        break
-                    }
-                }
-            }
+        val intercept = onStart()
+        if (!intercept) {
+            mChildAdapter?.start()
         }
         release()
     }
 
     final override fun release() {
-        mChildAdapters?.forEach {
-            it.onRelease()
-        }
+        onRelease()
     }
 
     override fun onStart(): Boolean {

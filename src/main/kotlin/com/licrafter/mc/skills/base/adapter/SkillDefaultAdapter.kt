@@ -17,8 +17,4 @@ open class SkillDefaultAdapter : AbsSkillAdapter<SkillDefaultAdapter>() {
     open fun getSkillController(): SkillController? {
         return mParentAdapter?.getSkillController()
     }
-
-    override fun onRelease() {
-        mParentAdapter?.onRelease()
-    }
 }

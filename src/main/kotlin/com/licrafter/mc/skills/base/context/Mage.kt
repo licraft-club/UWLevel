@@ -3,6 +3,7 @@ package com.licrafter.mc.skills.base.context
 import com.licrafter.mc.skills.ProjectileSkill
 import org.bukkit.entity.Player
 import java.lang.ref.WeakReference
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by shell on 2019/7/8.
@@ -14,12 +15,13 @@ class Mage(player: Player) {
 
     private val mWeakPlayer = WeakReference(player)
     private var mMagicPower = 0
-    private val mActivitedSkills = mutableListOf<Skill>()
+    private val mActivitedSkills = ConcurrentHashMap<String, Skill>()
 
     fun initSkill(controller: SkillController) {
         val skill = ProjectileSkill(this, controller)
-        if (!mActivitedSkills.contains(skill)) {
-            mActivitedSkills.add(skill)
+        val key = ProjectileSkill::class.java.simpleName
+        if (!mActivitedSkills.containsKey(key)) {
+            mActivitedSkills[key] = skill
         }
     }
 
@@ -32,7 +34,7 @@ class Mage(player: Player) {
         return mMagicPower
     }
 
-    fun getActivitedSkills(): MutableList<Skill> {
+    fun getActivitedSkills(): ConcurrentHashMap<String, Skill> {
         return mActivitedSkills
     }
 
@@ -40,7 +42,7 @@ class Mage(player: Player) {
         if (mActivitedSkills.size == 0) {
             return
         }
-        val iterator = mActivitedSkills.iterator()
+        val iterator = mActivitedSkills.values.iterator()
         while (iterator.hasNext()) {
             val skill = iterator.next()
             skill.tick()

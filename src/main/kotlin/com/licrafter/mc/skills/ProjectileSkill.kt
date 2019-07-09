@@ -1,5 +1,7 @@
 package com.licrafter.mc.skills
 
+import com.licrafter.mc.skills.adapters.ProjectileAdapter
+import com.licrafter.mc.skills.adapters.ProjectileExplodeAdapter
 import com.licrafter.mc.skills.base.adapter.SkillAdapterFactory
 import com.licrafter.mc.skills.base.context.Mage
 import com.licrafter.mc.skills.base.context.Skill

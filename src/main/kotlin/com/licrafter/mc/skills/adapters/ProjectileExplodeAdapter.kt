@@ -1,5 +1,6 @@
-package com.licrafter.mc.skills
+package com.licrafter.mc.skills.adapters
 
+import com.licrafter.mc.skills.UWSkill
 import com.licrafter.mc.skills.base.adapter.SkillDefaultAdapter
 import org.bukkit.Location
 import org.bukkit.entity.Entity
@@ -52,5 +53,8 @@ class ProjectileExplodeAdapter : SkillDefaultAdapter() {
         vector.multiply(1 / vector.lengthSquared())
         vector.y = vector.y / 5 + 0.5
         mob.velocity = vector
+    }
+
+    override fun onRelease() {
     }
 }
