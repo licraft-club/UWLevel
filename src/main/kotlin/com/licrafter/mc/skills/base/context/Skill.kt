@@ -1,5 +1,7 @@
 package com.licrafter.mc.skills.base.context
 
+import com.licrafter.mc.skills.adapters.AfterRunAdapter
+import com.licrafter.mc.skills.adapters.BeforeRunAdapter
 import com.licrafter.mc.skills.base.adapter.SkillAdapterFactory
 import com.licrafter.mc.skills.base.adapter.SkillRootAdapter
 
@@ -9,7 +11,7 @@ import com.licrafter.mc.skills.base.adapter.SkillRootAdapter
  * Gmail: shellljx@gmail.com
  */
 abstract class Skill(private val mage: Mage, private val controller: SkillController) {
-    val DEFAULT_COOL_DOWN_TIME = 2
+    private val DEFAULT_COOL_DOWN_TIME = 5
 
     private var coolDownTime = DEFAULT_COOL_DOWN_TIME
     private var mRootAdapter: SkillRootAdapter? = null
@@ -20,8 +22,10 @@ abstract class Skill(private val mage: Mage, private val controller: SkillContro
 
     private fun create() {
         mRootAdapter = onCreate(
-                SkillAdapterFactory.AdapterChainBuilder().put(SkillRootAdapter())
-        ).build() as SkillRootAdapter?
+                SkillAdapterFactory.AdapterChainBuilder()
+                        .put(SkillRootAdapter())
+                        .put(BeforeRunAdapter())
+        ).put(AfterRunAdapter()).build() as SkillRootAdapter?
         mRootAdapter?.setSkillController(controller)
         mRootAdapter?.setSkillParams(SkillParams(mage, this))
     }
@@ -42,6 +46,15 @@ abstract class Skill(private val mage: Mage, private val controller: SkillContro
     //run skill cool down
     fun starCoolDown() {
         coolDownTime = DEFAULT_COOL_DOWN_TIME
+    }
+
+    //reture whether or not it is cooling
+    fun isCooling(): Boolean {
+        return coolDownTime != 0
+    }
+
+    fun getCoolDownTime(): Int {
+        return coolDownTime
     }
 
     abstract fun onCreate(builder: SkillAdapterFactory.AdapterChainBuilder): SkillAdapterFactory.AdapterChainBuilder

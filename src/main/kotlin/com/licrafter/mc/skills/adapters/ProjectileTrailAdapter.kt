@@ -48,6 +48,8 @@ class ProjectileTrailAdapter : SkillDefaultAdapter() {
             mage.sendMessage("too close!")
             return true
         }
+        //resdience check
+
         val direction = targetLocation.toVector().subtract(projectileLocation.toVector()).normalize().multiply(0.5)
         var distance = projectileLocation.distance(targetLocation)
         for (index in 0..256) {

@@ -2,6 +2,7 @@ package com.licrafter.mc.skills.base.context
 
 import com.licrafter.mc.skills.ProjectileSkill
 import com.licrafter.mc.skills.PushSkill
+import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentHashMap
@@ -61,6 +62,10 @@ class Mage(player: Player) {
 
     fun decreaseMagicPower(count: Int) {
         mMagicPower = Math.max(mMagicPower - count, 0)
+    }
+
+    fun sendMessage(message: String) {
+        getPlayer()?.sendMessage(ChatColor.translateAlternateColorCodes('&', message))
     }
 
     fun getPlayer(): Player? {

@@ -34,7 +34,7 @@ object UWSkill {
             (player as CraftPlayer).handle.playerConnection.sendPacket(packet)
         }, 0, 20)
         LevelPlugin.skillController().getMage(player)?.getActivitedSkills()?.let {
-            it[PushSkill::class.java.simpleName]?.run()
+            it[ProjectileSkill::class.java.simpleName]?.run()
         }
     }
 

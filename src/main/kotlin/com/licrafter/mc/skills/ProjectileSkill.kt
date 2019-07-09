@@ -1,5 +1,7 @@
 package com.licrafter.mc.skills
 
+import com.licrafter.mc.skills.adapters.AfterRunAdapter
+import com.licrafter.mc.skills.adapters.BeforeRunAdapter
 import com.licrafter.mc.skills.adapters.ProjectileTrailAdapter
 import com.licrafter.mc.skills.adapters.PushDamageAdapter
 import com.licrafter.mc.skills.base.adapter.SkillAdapterFactory
