@@ -1,6 +1,7 @@
 package com.licrafter.mc.skills.base.context
 
 import com.licrafter.mc.skills.ProjectileSkill
+import com.licrafter.mc.skills.PushSkill
 import org.bukkit.entity.Player
 import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentHashMap
@@ -18,10 +19,15 @@ class Mage(player: Player) {
     private val mActivitedSkills = ConcurrentHashMap<String, Skill>()
 
     fun initSkill(controller: SkillController) {
-        val skill = ProjectileSkill(this, controller)
+        val skill1 = ProjectileSkill(this, controller)
         val key = ProjectileSkill::class.java.simpleName
         if (!mActivitedSkills.containsKey(key)) {
-            mActivitedSkills[key] = skill
+            mActivitedSkills[key] = skill1
+        }
+        val skill2 = PushSkill(this, controller)
+        val key2 = PushSkill::class.java.simpleName
+        if (!mActivitedSkills.containsKey(key2)) {
+            mActivitedSkills[key2] = skill2
         }
     }
 

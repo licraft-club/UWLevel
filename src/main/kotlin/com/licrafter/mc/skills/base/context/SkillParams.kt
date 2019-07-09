@@ -1,6 +1,5 @@
 package com.licrafter.mc.skills.base.context
 
-import org.bukkit.block.Block
 import org.bukkit.entity.Entity
 
 /**
@@ -13,8 +12,6 @@ class SkillParams(val mage: Mage, val skill: Skill) {
     var skillRange = 10.0
 
     val mageNearbyEntities = arrayListOf<Entity>()
-    var projectileTargetEntity: Entity? = null
-    var projectileTargetBlock: Block? = null
 
     init {
         mage.getPlayer()?.let {

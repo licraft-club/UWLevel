@@ -1,11 +1,13 @@
 package com.licrafter.mc.skills.adapters
 
+import com.licrafter.lib.vector.VectorUtils
 import com.licrafter.mc.level.LevelPlugin
 import com.licrafter.mc.skills.base.adapter.SkillDefaultAdapter
 import org.bukkit.*
 import org.bukkit.block.Block
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Firework
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.util.BlockIterator
 import org.bukkit.util.BoundingBox
@@ -15,28 +17,34 @@ import org.bukkit.util.BoundingBox
  * <p>
  * Gmail: shellljx@gmail.com
  */
-class ProjectileAdapter : SkillDefaultAdapter() {
+class ProjectileTrailAdapter : SkillDefaultAdapter() {
 
     var blockIterator: BlockIterator? = null
+    var mTrailTarget: Any? = null
 
     override fun onStart(): Boolean {
         val skillParams = getSkillParams() ?: return false
         val mage = skillParams.mage.getPlayer() ?: return false
         val sourceLocation = mage.location
         val projectileLocation = mage.location.add(0.0, 1.0, 0.0)
-        val targetBlock = findTargetBlock(mage.eyeLocation, skillParams.skillRange.toInt())
-        val targetEntity = findTarget(mage)
+        mTrailTarget = VectorUtils.findTargetEntity(mage, skillParams.skillRange)
+        if (mTrailTarget == null) {
+            mTrailTarget = findTargetBlock(mage.eyeLocation, skillParams.skillRange.toInt())
+        }
 
-        skillParams.projectileTargetBlock = targetBlock
-        skillParams.projectileTargetEntity = targetEntity
+        val targetLocation = mTrailTarget?.let {
+            when (it) {
+                is LivingEntity -> getBoxCenterLocation(it.world, it.boundingBox)
+                is Block -> getBoxCenterLocation(it.world, it.boundingBox)
+                else -> null
+            }
+        }
 
-        val targetLocation = targetEntity?.let { getBoxCenterLocation(it.world, it.boundingBox) }
-                ?: targetBlock?.let { getBoxCenterLocation(it.world, it.boundingBox) }
-        if (targetLocation == null || targetLocation.x == 0.0 && targetLocation.y == 0.0 && targetLocation.z == 0.0) {
+        if (mTrailTarget == null || targetLocation == null || targetLocation.x == 0.0 && targetLocation.y == 0.0 && targetLocation.z == 0.0) {
             mage.sendMessage("miss target")
             return true
         }
-        if (targetLocation.distance(projectileLocation) <= 3) {
+        if (targetLocation.distance(projectileLocation) <= 2) {
             mage.sendMessage("too close!")
             return true
         }
@@ -72,19 +80,14 @@ class ProjectileAdapter : SkillDefaultAdapter() {
         return super.onStart()
     }
 
+    override fun getTarget(): Any? {
+        return mTrailTarget
+    }
+
     fun getBoxCenterLocation(world: World, boundingBox: BoundingBox): Location {
         return boundingBox.center.toLocation(world)
     }
 
-    fun findTarget(player: Player): Entity? {
-        val params = getSkillParams() ?: return null
-        for (entity in params.mageNearbyEntities) {
-            if (doesPlayerTarget(player, entity, params.skillRange)) {
-                return entity
-            }
-        }
-        return null
-    }
 
     private fun findTargetBlock(projectileLocation: Location, range: Int): Block? {
         blockIterator = null

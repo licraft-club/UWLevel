@@ -17,4 +17,8 @@ open class SkillDefaultAdapter : AbsSkillAdapter<SkillDefaultAdapter>() {
     open fun getSkillController(): SkillController? {
         return mParentAdapter?.getSkillController()
     }
+
+    final override fun getParentTarget(): Any? {
+        return mParentAdapter?.getTarget()
+    }
 }
