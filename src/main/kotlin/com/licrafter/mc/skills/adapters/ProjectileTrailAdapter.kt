@@ -40,7 +40,7 @@ class ProjectileTrailAdapter : SkillDefaultAdapter() {
             }
         }
 
-        if (mTrailTarget == null || targetLocation == null || targetLocation.x == 0.0 && targetLocation.y == 0.0 && targetLocation.z == 0.0) {
+        if (mTrailTarget == null || targetLocation == null || (targetLocation.x == 0.0 && targetLocation.y == 0.0 && targetLocation.z == 0.0) && !targetLocation.chunk.isLoaded) {
             mage.sendMessage("miss target")
             return true
         }
