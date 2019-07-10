@@ -1,7 +1,6 @@
 package com.licrafter.mc.skills
 
 import com.licrafter.mc.level.LevelPlugin
-import com.licrafter.mc.skills.base.context.Mage
 import com.licrafter.mc.skills.base.context.Skill
 import com.licrafter.mc.skills.event.SkillDamageEvent
 import com.licrafter.mc.skills.event.SkillTrueDamageEvent
@@ -33,8 +32,8 @@ object UWSkill {
             val packet = PacketPlayOutChat(ccText, ChatMessageType.GAME_INFO)
             (player as CraftPlayer).handle.playerConnection.sendPacket(packet)
         }, 0, 20)
-        LevelPlugin.skillController().getMage(player)?.getActivitedSkills()?.let {
-            it[ProjectileSkill::class.java.simpleName]?.run()
+        LevelPlugin.skillController().getMage(player)?.getActivedSkill()?.let {
+            it.run()
         }
     }
 

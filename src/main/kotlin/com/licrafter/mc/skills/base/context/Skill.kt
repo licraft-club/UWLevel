@@ -1,5 +1,6 @@
 package com.licrafter.mc.skills.base.context
 
+import com.licrafter.mc.skills.SkillUtils
 import com.licrafter.mc.skills.adapters.AfterRunAdapter
 import com.licrafter.mc.skills.adapters.BeforeRunAdapter
 import com.licrafter.mc.skills.base.adapter.SkillAdapterFactory
@@ -13,7 +14,7 @@ import com.licrafter.mc.skills.base.adapter.SkillRootAdapter
 abstract class Skill(private val mage: Mage, private val controller: SkillController) {
     private val DEFAULT_COOL_DOWN_TIME = 5
 
-    private var coolDownTime = DEFAULT_COOL_DOWN_TIME
+    private var coolDownTime = 0
     private var mRootAdapter: SkillRootAdapter? = null
 
     init {
@@ -53,8 +54,12 @@ abstract class Skill(private val mage: Mage, private val controller: SkillContro
         return coolDownTime != 0
     }
 
-    fun getCoolDownTime(): Int {
+    fun getCoolingTime(): Int {
         return coolDownTime
+    }
+
+    fun getCoolingProgress(): Double {
+        return coolDownTime.toDouble() / DEFAULT_COOL_DOWN_TIME
     }
 
     abstract fun onCreate(builder: SkillAdapterFactory.AdapterChainBuilder): SkillAdapterFactory.AdapterChainBuilder

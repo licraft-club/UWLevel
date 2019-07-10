@@ -10,13 +10,13 @@ import com.licrafter.mc.skills.base.context.SkillController
 class MageTask(private val controller: SkillController) : Runnable {
 
     override fun run() {
-        if (controller.getActivitedMages().size == 0) {
+        if (controller.getMages().size == 0) {
             return
         }
-        val iterator = controller.getActivitedMages().values.iterator()
+        val iterator = controller.getMages().values.iterator()
         while (iterator.hasNext()) {
             val mage = iterator.next()
-            if (mage.isActivity()) {
+            if (mage.isActive()) {
                 mage.tick()
             } else {
                 iterator.remove()

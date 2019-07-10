@@ -1,5 +1,6 @@
 package com.licrafter.mc.skills.adapters
 
+import com.licrafter.mc.skills.SkillUtils
 import com.licrafter.mc.skills.base.adapter.SkillDefaultAdapter
 
 /**
@@ -13,6 +14,9 @@ class AfterRunAdapter : SkillDefaultAdapter() {
 
     override fun onStart(): Boolean {
         getSkillParams()?.skill?.starCoolDown()
+        getSkillParams()?.mage?.let {
+            SkillUtils.sendPlayerStayTimeProgressbar(it)
+        }
         return super.onStart()
     }
 }

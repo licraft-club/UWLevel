@@ -16,7 +16,7 @@ class BeforeRunAdapter : SkillDefaultAdapter() {
         val skill = params.skill
         if (skill.isCooling()) {
             //正在冷却中
-            params.mage.sendMessage("&a技能正在冷却中,等待: ${skill.getCoolDownTime()} 秒")
+            params.mage.sendMessage("&a技能正在冷却中,等待: ${skill.getCoolingTime()} 秒")
             return true
         }
         return super.onStart()

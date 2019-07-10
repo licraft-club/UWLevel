@@ -2,6 +2,7 @@ package com.licrafter.mc.skills.base.context
 
 import com.licrafter.mc.skills.ProjectileSkill
 import com.licrafter.mc.skills.PushSkill
+import com.licrafter.mc.skills.SkillUtils
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import java.lang.ref.WeakReference
@@ -17,46 +18,54 @@ class Mage(player: Player) {
 
     private val mWeakPlayer = WeakReference(player)
     private var mMagicPower = 0
-    private val mActivitedSkills = ConcurrentHashMap<String, Skill>()
+    private val mAvailableSkills = ConcurrentHashMap<String, Skill>()
+    private var mActivedSkill: Skill? = null
+    private var mIsActive = false
 
     fun initSkill(controller: SkillController) {
         val skill1 = ProjectileSkill(this, controller)
         val key = ProjectileSkill::class.java.simpleName
-        if (!mActivitedSkills.containsKey(key)) {
-            mActivitedSkills[key] = skill1
+        if (!mAvailableSkills.containsKey(key)) {
+            mAvailableSkills[key] = skill1
         }
         val skill2 = PushSkill(this, controller)
         val key2 = PushSkill::class.java.simpleName
-        if (!mActivitedSkills.containsKey(key2)) {
-            mActivitedSkills[key2] = skill2
+        if (!mAvailableSkills.containsKey(key2)) {
+            mAvailableSkills[key2] = skill2
         }
+        mActivedSkill = skill1
     }
 
     fun tick() {
         increaseMagicPower(1)
         skillCoolDown()
+        SkillUtils.sendPlayerStayTimeProgressbar(this)
     }
 
     fun getMagicPower(): Int {
         return mMagicPower
     }
 
-    fun getActivitedSkills(): ConcurrentHashMap<String, Skill> {
-        return mActivitedSkills
+    fun getAvailableSkills(): ConcurrentHashMap<String, Skill> {
+        return mAvailableSkills
     }
 
-    fun skillCoolDown() {
-        if (mActivitedSkills.size == 0) {
+    fun getActivedSkill(): Skill? {
+        return mActivedSkill
+    }
+
+    private fun skillCoolDown() {
+        if (mAvailableSkills.size == 0) {
             return
         }
-        val iterator = mActivitedSkills.values.iterator()
+        val iterator = mAvailableSkills.values.iterator()
         while (iterator.hasNext()) {
             val skill = iterator.next()
             skill.tick()
         }
     }
 
-    fun increaseMagicPower(count: Int) {
+    private fun increaseMagicPower(count: Int) {
         mMagicPower = Math.min(mMagicPower + count, DEFAULT_MAX_MAGIC_POWER)
     }
 
@@ -72,7 +81,11 @@ class Mage(player: Player) {
         return mWeakPlayer.get()
     }
 
-    fun isActivity(): Boolean {
-        return mWeakPlayer.get() != null
+    fun isActive(): Boolean {
+        return mWeakPlayer.get() != null && mIsActive
+    }
+
+    fun setActive(active: Boolean) {
+        this.mIsActive = active
     }
 }

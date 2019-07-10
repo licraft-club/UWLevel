@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap
  */
 class SkillController(private val plugin: LevelPlugin) {
 
-    private val mActivitedMages = ConcurrentHashMap<UUID, Mage>()
+    private val mMages = ConcurrentHashMap<UUID, Mage>()
 
     private lateinit var mMageTask: MageTask
 
@@ -28,18 +28,19 @@ class SkillController(private val plugin: LevelPlugin) {
     }
 
     fun getMage(player: Player): Mage? {
-        return if (mActivitedMages.containsKey(player.uniqueId)) {
-            mActivitedMages[player.uniqueId]
+        return if (mMages.containsKey(player.uniqueId)) {
+            mMages[player.uniqueId]
         } else {
             val mage = Mage(player)
             mage.initSkill(this)
-            mActivitedMages[player.uniqueId] = mage
+            mage.setActive(true)
+            mMages.put(player.uniqueId,mage)
             mage
         }
     }
 
-    fun getActivitedMages(): ConcurrentHashMap<UUID, Mage> {
-        return mActivitedMages
+    fun getMages(): ConcurrentHashMap<UUID, Mage> {
+        return mMages
     }
 
 
