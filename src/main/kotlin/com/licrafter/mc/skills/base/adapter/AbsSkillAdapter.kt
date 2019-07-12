@@ -25,8 +25,8 @@ abstract class AbsSkillAdapter<T : AbsSkillAdapter<T>> : ISkillAdapter {
         return false
     }
 
-    override fun getTarget(): Any? {
-        return null
+    override fun getTarget(): List<Any> {
+        return emptyList()
     }
 
     override fun onRelease() {

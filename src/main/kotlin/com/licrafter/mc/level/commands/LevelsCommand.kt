@@ -1,5 +1,6 @@
 package com.licrafter.mc.level.commands
 
+import com.licrafter.mc.level.LevelPlugin
 import com.licrafter.mc.skills.UWSkill
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -21,6 +22,8 @@ class LevelsCommand : CommandExecutor {
             return ParticleCmd.perform(sender, command, label, args)
         } else if (args[0] == "skill") {
             UWSkill.start(sender as Player)
+        } else if (args[0] == "skillapi") {
+            LevelPlugin.skillApiManager().cast(sender as Player)
         }
         return true
     }

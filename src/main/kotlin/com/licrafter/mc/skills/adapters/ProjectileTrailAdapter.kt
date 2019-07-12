@@ -82,8 +82,10 @@ class ProjectileTrailAdapter : SkillDefaultAdapter() {
         return super.onStart()
     }
 
-    override fun getTarget(): Any? {
-        return mTrailTarget
+    override fun getTarget(): List<Any> {
+        return mTrailTarget?.let {
+            listOf(it)
+        } ?: run { super.getTarget() }
     }
 
     fun getBoxCenterLocation(world: World, boundingBox: BoundingBox): Location {

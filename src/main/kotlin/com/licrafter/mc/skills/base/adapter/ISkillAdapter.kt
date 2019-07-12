@@ -10,9 +10,9 @@ interface ISkillAdapter {
 
     fun start()
 
-    fun getParentTarget(): Any?
+    fun getParentTarget(): List<Any>
 
-    fun getTarget(): Any?
+    fun getTarget(): List<Any>
 
     fun release()
 

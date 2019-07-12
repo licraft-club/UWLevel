@@ -19,19 +19,25 @@ import org.bukkit.entity.Player
 class PushDamageAdapter : SkillDefaultAdapter() {
 
     override fun onStart(): Boolean {
-        val centerTarget = getParentTarget() ?: getSkillParams()?.mage?.getPlayer() ?: return true
+        val skillParams = getSkillParams() ?: return true
+        val parentTargets = getParentTarget()
+        val skillCenter = if (parentTargets.isEmpty()) {
+            skillParams.mage
+        } else {
+            parentTargets[0]
+        }
         val centerLocation: Location
         val targetEntities: MutableList<Entity>
 
-        when (centerTarget) {
+        when (skillCenter) {
             is LivingEntity -> {
-                targetEntities = centerTarget.getNearbyEntities(3.0, 3.0, 3.0)
-                targetEntities.add(centerTarget)
-                centerLocation = centerTarget.location
+                targetEntities = skillCenter.getNearbyEntities(3.0, 3.0, 3.0)
+                targetEntities.add(skillCenter)
+                centerLocation = skillCenter.location
             }
             is Block -> {
-                targetEntities = centerTarget.world.getNearbyEntities(centerTarget.location, 3.0, 3.0, 3.0).toMutableList()
-                centerLocation = centerTarget.location
+                targetEntities = skillCenter.world.getNearbyEntities(skillCenter.location, 3.0, 3.0, 3.0).toMutableList()
+                centerLocation = skillCenter.location
             }
             else -> return true
         }

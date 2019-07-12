@@ -12,6 +12,7 @@ import com.licrafter.mc.level.listeners.MythicMobListener
 import com.licrafter.mc.level.listeners.PlayerListener
 import com.licrafter.mc.level.listeners.UWLevelListener
 import com.licrafter.mc.level.models.config.*
+import com.licrafter.mc.level.thirdparty.SkillApiManager
 import com.licrafter.mc.skills.UWSkill
 import com.licrafter.mc.skills.base.context.SkillController
 import de.slikey.effectlib.EffectManager
@@ -44,7 +45,7 @@ class LevelPlugin : JavaPlugin() {
         particleManager = ParticleManager()
         skillController = SkillController(this)
         skillController.setup()
-        server.messenger
+        initThirdParty()
     }
 
     private fun initConfig() {
@@ -74,6 +75,15 @@ class LevelPlugin : JavaPlugin() {
 
     }
 
+    private fun initThirdParty() {
+        skillApiManager = SkillApiManager()
+        if (skillApiManager.initialize()) {
+            BLog.consoleMessage("skill api manager init success")
+        } else {
+            BLog.consoleMessage("skill api manager init failed")
+        }
+    }
+
     override fun onDisable() {
         BLog.printDisableInfo(this)
         effectManager.dispose()
@@ -91,6 +101,8 @@ class LevelPlugin : JavaPlugin() {
         private lateinit var altarGuiConfig: AltarGuiConfig
         private lateinit var particleManager: ParticleManager
         private lateinit var skillController: SkillController
+
+        private lateinit var skillApiManager: SkillApiManager
 
         fun levelConfig(): LevelConfig {
             return levelConfig
@@ -130,6 +142,10 @@ class LevelPlugin : JavaPlugin() {
 
         fun skillController(): SkillController {
             return skillController
+        }
+
+        fun skillApiManager(): SkillApiManager {
+            return skillApiManager
         }
 
         fun getRepository(): Repository? {
