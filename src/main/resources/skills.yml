@@ -1,0 +1,7 @@
+skills:
+  blast_1:
+    book: 'blast_1'
+    levelReq: 1
+    skill: 'blast|1'
+  blast_2:
+    book: 'blast_2'

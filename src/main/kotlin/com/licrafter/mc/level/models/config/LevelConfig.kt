@@ -18,6 +18,8 @@ class LevelConfig {
     var server: String? = null
     @ConfigValue(path = "settings.language")
     var language: String? = null
+    @ConfigValue(path = "settings.message-showtype", defaultsTo = "actionbar")
+    var messageShowType = ""
     @ConfigSection(path = "settings.prefixs")
     var prefixMap = HashMap<String, Prefix>()
     @ConfigSection(path = "settings.levels")
@@ -33,17 +35,21 @@ class LevelConfig {
             }
             return field
         }
+    @ConfigValue(path = "settings.wand")
+    var wand = ""
 
     class Level : Comparable<Level> {
 
         @ConfigValue(path = "number")
         var number: Int = 0
-        @ConfigValue(path = "maxHealth")
-        var maxHealth = 0
+        @ConfigValue(path = "maxMagic")
+        var maxMagic = 0
         @ConfigValue(path = "particles")
         var particles = arrayListOf<String>()
         @ConfigSection(path = "condition")
         var condition: Condition? = null
+        @ConfigValue(path = "attributes")
+        var attributes = emptyList<String>()
 
         override fun compareTo(other: Level): Int {
             return this.number - other.number
@@ -123,6 +129,13 @@ class LevelConfig {
             }
             return Pair(itemName, itemCount)
         }
+    }
+
+    class Wand {
+        @ConfigValue(path = "displayname")
+        var displayName = ""
+        @ConfigValue(path = "lores")
+        var lores = arrayListOf<String>()
     }
 
     @Nullable

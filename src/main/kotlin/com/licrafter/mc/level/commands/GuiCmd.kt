@@ -1,8 +1,8 @@
 package com.licrafter.mc.level.commands
 
-import com.licrafter.mc.level.LevelPlugin
-import com.licrafter.mc.level.gui.AltarGui
-import com.licrafter.mc.level.ItemManager
+import com.licrafter.mc.level.models.PlayerManager
+import com.licrafter.mc.level.guis.AltarGui
+import com.licrafter.mc.level.guis.SkillSelectGui
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -16,19 +16,28 @@ object GuiCmd : LevelCmdInterface {
 
     override fun perform(sender: CommandSender, cmd: Command, label: String, args: Array<out String>): Boolean {
         if (sender is Player) {
-            val altarGui = AltarGui()
-            val inventory = altarGui.createAltarGui(sender)
-            if (inventory == null) {
-                sender.sendMessage("创建gui失败，请查看配置文件")
+            if (args.size < 2) {
+                sender.sendMessage("/levels guis [name]")
                 return true
             }
-            sender.openInventory(inventory)
-            val item = LevelPlugin.itemConfig().bookMap["bk1"] ?: return true
-            val book = LevelPlugin.itemConfig().itemMap["item1"] ?: return true
-            val itemStack = ItemManager.createBook("bk1", item)
-            val itemStack2 = ItemManager.createItem("item1", book)
-            sender.inventory.addItem(itemStack)
-            sender.inventory.addItem(itemStack2)
+            if (args[1] == "altar") {
+                val altarGui = AltarGui()
+                val inventory = altarGui.createAltarGui(sender)
+                if (inventory == null) {
+                    sender.sendMessage("创建gui失败，请查看配置文件")
+                    return true
+                }
+                sender.openInventory(inventory)
+            } else if (args[1] == "skill") {
+                val levelPlayer = PlayerManager.getLevelPlayer(sender) ?: return true
+                val skillGui = SkillSelectGui()
+                val inventory = skillGui.create(levelPlayer)
+                if (inventory == null) {
+                    sender.sendMessage("创建gui失败，请查看配置文件")
+                    return true
+                }
+                sender.openInventory(inventory)
+            }
         }
         return true
     }

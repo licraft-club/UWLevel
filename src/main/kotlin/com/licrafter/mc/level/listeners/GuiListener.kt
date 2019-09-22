@@ -1,14 +1,14 @@
 package com.licrafter.mc.level.listeners
 
 import com.licrafter.lib.log.BLog
-import com.licrafter.mc.level.LevelPlugin
-import com.licrafter.mc.level.db.ExecutorCallback
+import com.licrafter.mc.level.*
 import com.licrafter.mc.level.events.UWLevelChangedEvent
 import com.licrafter.mc.level.events.UWLevelUpEvent
-import com.licrafter.mc.level.gui.AltarGui
+import com.licrafter.mc.level.guis.AltarGui
+import com.licrafter.mc.level.models.LevelManager
+import com.licrafter.mc.level.models.PlayerManager
 import org.bukkit.Bukkit
 import org.bukkit.Material
-import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -17,7 +17,6 @@ import org.bukkit.event.Listener
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.persistence.PersistentDataType
 
 /**
  * Created by shell on 2019/5/25.
@@ -42,17 +41,17 @@ class GuiListener : Listener {
         }
         //右键升级按钮
         if (AltarGui.isButtonFiller(event.rawSlot, altarGui.size) && event.click == ClickType.LEFT) {
-            val levelPlayer = LevelPlugin.playerManager().getLevelPlayer(player)
-            val level = levelPlayer?.getLevel()
+            val levelPlayer = PlayerManager.getLevelPlayer(player)
+            val level = LevelManager.config.getLevel(levelPlayer?.level ?: -1)
             if (levelPlayer == null || level == null) {
                 player.sendMessage("&4你还没有加入魔法升级之路")
                 return
             }
-            if (LevelPlugin.levelConfig().isMaxLevel(level)) {
+            if (LevelManager.config.isMaxLevel(level)) {
                 player.sendMessage("&4你已经到达了最高等级")
                 return
             }
-            val nextLevel = LevelPlugin.levelConfig().getNextLevel(level) ?: return
+            val nextLevel = LevelManager.config.getNextLevel(level) ?: return
             val condition = level.condition ?: return
 
             //检查物品
@@ -113,17 +112,32 @@ class GuiListener : Listener {
                 }
                 player.closeInventory()
             }
-            LevelPlugin.dbManager().getRepository()?.updateLevelPlayer(levelPlayer, nextLevel, object : ExecutorCallback<Boolean>() {
-                override fun callback(value: Boolean) {
-                    if (value) {
-                        levelPlayer.upGrade(nextLevel)
-                        player.sendMessage("升级成功!")
-                        val changeEvent = UWLevelChangedEvent(levelPlayer)
-                        Bukkit.getServer().pluginManager.callEvent(changeEvent)
-                    }
-                }
-            })
+
+            levelPlayer.level += 1
+            player.sendMessage("升级成功!")
+            val changeEvent = UWLevelChangedEvent(levelPlayer)
+            Bukkit.getServer().pluginManager.callEvent(changeEvent)
         }
+    }
+
+    @EventHandler
+    fun onSkillGuiClick(event: InventoryClickEvent) {
+        val clickInv = event.clickedInventory ?: return
+        val player = event.whoClicked as Player
+        val invName = player.openInventory.title
+
+        if (!invName.contains("技能选择")) {
+            return
+        }
+
+        val item = clickInv.getItem(event.rawSlot) ?: return
+        if (item.type == Material.AIR) {
+            return
+        }
+        val bindSkill = ItemManager.getSkill(item) ?: return
+        SkillsManager.bind(player, bindSkill)
+        event.isCancelled = true
+        player.closeInventory()
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

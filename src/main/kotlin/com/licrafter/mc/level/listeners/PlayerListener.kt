@@ -2,26 +2,22 @@ package com.licrafter.mc.level.listeners
 
 import com.licrafter.lib.log.BLog
 import com.licrafter.mc.level.LevelPlugin
-import com.licrafter.mc.level.db.ExecutorCallback
+import com.licrafter.mc.level.models.PlayerManager
 import com.licrafter.mc.level.events.LevelPlayerLoadedEvent
-import com.licrafter.mc.level.events.UWLevelChangedEvent
-import com.licrafter.mc.level.events.UWLevelUpEvent
-import com.licrafter.mc.level.models.LevelPlayer
-import org.bukkit.*
-import org.bukkit.attribute.Attribute
+import org.bukkit.Bukkit
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftProjectile
 import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDeathEvent
-import org.bukkit.event.entity.EntityRegainHealthEvent
 import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
-import org.bukkit.inventory.ItemStack
-import org.fusesource.jansi.Ansi
+import org.bukkit.event.player.PlayerQuitEvent
 import java.util.*
 
 /**
@@ -35,19 +31,17 @@ class PlayerListener : Listener {
     fun onPlayerJoin(event: PlayerJoinEvent) {
         val player = event.player
         //todo filter disable world
-        LevelPlugin.dbManager().getRepository()?.getLevelPlayer(player, object : ExecutorCallback<LevelPlayer>() {
-            override fun callback(value: LevelPlayer) {
-                if (!value.invalidate()) {
-                    value.setActive()
-                    LevelPlugin.playerManager().addLevelPlayer(value)
-                    val loadedEvent = LevelPlayerLoadedEvent(player, value)
-                    Bukkit.getServer().pluginManager.callEvent(loadedEvent)
-                    BLog.info(LevelPlugin.instance(), "LevelPlayer ${player.displayName} load success!")
-                } else {
-                    BLog.info(LevelPlugin.instance(), "no level player: ${player.displayName} join game!")
-                }
-            }
-        })
+        val userData = PlayerManager.loadLevelPlayer(player)
+        userData?.let {
+            val loadEvent = LevelPlayerLoadedEvent(event.player, it)
+            Bukkit.getServer().pluginManager.callEvent(loadEvent)
+            BLog.consoleMessage("load success level ability ${userData.displayName}")
+        }
+    }
+
+    @EventHandler
+    fun onPlayerQuit(event: PlayerQuitEvent) {
+        PlayerManager.savePlayer(event.player)
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -81,19 +75,18 @@ class PlayerListener : Listener {
         } else {
             return
         }
-        val levelPlayer = LevelPlugin.playerManager().getLevelPlayer(killer.uniqueId) ?: return
-        levelPlayer.addMobkilled(1)
+        val levelPlayer = PlayerManager.getLevelPlayer(killer.uniqueId) ?: return
+        levelPlayer.mobKill += 1
         killer.sendMessage("获得怪物灵魂+" + 1)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onCraftItem(event: CraftItemEvent) {
-        System.out.println(event.click)
+
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun prepareCraftItem(event: PrepareItemCraftEvent) {
-        System.out.println(event.isRepair)
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -104,20 +97,23 @@ class PlayerListener : Listener {
     fun onPlayerAttacked(event: EntityDamageByEntityEvent) {
         if (event.entity is Player) {
             val player = event.entity as Player
-            player.sendMessage(event.damager.name + "造成伤害: " + event.damage)
+            player.sendMessage(event.damager.name + "受到伤害: " + Math.floor(event.damage) + " 血量:" + Math.floor(player.health))
         }
-        if (event.damager is Player && event.entity is Mob) {
+        if ((event.damager is Player) && event.entity is Mob) {
             val player = event.damager as Player
             val mob = event.entity as Mob
-            player.sendMessage("造成伤害: " + event.damage + " 血量: " + mob.health)
+            player.sendMessage("造成伤害: " + Math.floor(event.damage) + " 血量: " + Math.floor(mob.health))
+        }
+
+        if (event.damager is CraftProjectile && event.entity is Mob) {
+            val shooter = (event.damager as CraftProjectile).shooter
+            val mob = event.entity as Mob
+            (shooter as Player).sendMessage("造成伤害: " + Math.floor(event.damage) + " 血量: " + Math.floor(mob.health))
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    fun onLevelSkillFireworkDamage(event: EntityDamageByEntityEvent) {
-        val damager = event.damager
-        if (damager is Firework && damager.fireworkMeta.displayName == "level_skill") {
-            event.isCancelled = true
-        }
+    fun onLevelSkillFireworkDamage(event: EntityDamageEvent) {
+        System.out.println(event.cause.name)
     }
 }

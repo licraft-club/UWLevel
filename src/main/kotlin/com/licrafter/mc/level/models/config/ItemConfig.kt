@@ -9,37 +9,28 @@ import com.licraft.apt.config.ConfigValue
  * <p>
  * Gmail: shellljx@gmail.com
  */
-@ConfigBean(file = "items.yml")
+@ConfigBean(file = "items/items.yml")
 class ItemConfig {
-    @ConfigSection(path = "books")
-    var bookMap = HashMap<String, Book>()
     @ConfigSection(path = "items")
     var itemMap = HashMap<String, Item>()
 
-    class Book {
+    class Item {
+        @ConfigValue(path = "skill")
+        var skill: String? = null
+        @ConfigValue(path = "requestlevel")
+        var requestLevel = 1
+        @ConfigValue(path = "skull-value")
+        var skullValue = ""
         @ConfigValue(path = "material")
         var material = ""
         @ConfigValue(path = "display")
         var display = ""
-        @ConfigValue(path = "amount")
-        var amount = 1
         @ConfigValue(path = "author")
         var author = ""
         @ConfigValue(path = "title")
         var title = ""
         @ConfigValue(path = "pages")
         var pages = arrayListOf<String>()
-        @ConfigValue(path = "lores")
-        var lores = arrayListOf<String>()
-    }
-
-    class Item {
-        @ConfigValue(path = "value")
-        var value = ""
-        @ConfigValue(path = "display")
-        var display = ""
-        @ConfigValue(path = "amount")
-        var amount = 1
         @ConfigValue(path = "lores")
         var lores = arrayListOf<String>()
     }

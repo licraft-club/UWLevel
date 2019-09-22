@@ -1,0 +1,35 @@
+nameHealthDisplay:
+  maxLength: 40
+  duration: 4
+  lost: '&7|'
+  remain: '&4|'
+  #[进度]-当前血量/最大血量
+  format: '&f[%s&f] &e%s/%s'
+holoDamageDisplay:
+  format: '&a&o暴击:&b&o+%s'
+  duration: 2
+attributes:
+  Dodge:
+    display: '闪避'
+  Damage:
+    display: '攻击力'
+  LifeSteal:
+    display: '生命偷取'
+  ArmorBreak:
+    display: '破甲'
+  Crit:
+    display: '暴击'
+  CritRate:
+    display: '暴击几率'
+  Defense:
+    display: '护甲'
+  HitRate:
+    display: '命中率'
+  Reflex:
+    display: '反射伤害'
+  ReflexRate:
+    display: '反射几率'
+  FireRate:
+    display: '点燃'
+  Health:
+    display: '血量'

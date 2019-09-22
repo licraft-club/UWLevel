@@ -1,0 +1,39 @@
+items:
+  bk1:
+    material: 'WRITTEN_BOOK'
+    display: '睿智之书'
+    author: '系统'
+    title: '这是一本书的title'
+    pages:
+    - '这是第一页内容'
+    - '这是第二页内容'
+    lores:
+    - '&5魔法祭坛祭品'
+  item2:
+    material: 'PRISMARINE_CRYSTALS'
+    display: '&a魔石砂粒'
+    lores:
+    - '&e宇宙大爆炸产生的魔石砂粒散落在世界各地'
+    - '&e尚有少量魔素存储在魔石砂粒中'
+  item3:
+    material: 'PRISMARINE_SHARD'
+    display: '&a魔石碎片'
+    lores:
+    - '&e多块魔石砂粒凝聚而成的碎片'
+    - '&e尚有大量魔素存储在魔石碎片中'
+  wand:
+    material: 'WOODEN_AXE'
+    display: '&a法杖'
+    lores:
+    - '&e技能: &b未绑定'
+    - '&e魔法技能触发器'
+    - '&b左&e键释放魔法技能'
+    - '&b右&e键打开技能选择界面'
+  head1:
+    skull-value: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3
+    RleHR1cmUvODRlNGE2OTdmN2YzNWJhYTRjZDczNDI5YjE1YmVjNjhjYzcyOGU5ZjZkNmYwMzU3YTM4MzMyNjZj
+    NGMyIn19fQ=='
+    display: '&e龙历石'
+    lores:
+    - '&5魔法祭坛祭品'
+    - '&7用于魔法升级'

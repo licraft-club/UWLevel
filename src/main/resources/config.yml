@@ -3,6 +3,8 @@ settings:
   #服务器基本信息
   server: 'Under Worlder 服务器'
   language: 'zh'
+  #信息展示的类型none,actionbar,title
+  message-showtype: 'actionbar'
   #用户数据保存方式
   storage:
     #可选 Mysql 或者 Sqlite 两种方式
@@ -37,17 +39,18 @@ settings:
       fullname: '&a上位魔将'
       mixlevel: 20
     "7":
-      fullname: '&a原初之红'
+      fullname: '&a原初之黑'
       mixlevel: 25
     "8":
       fullname: '&a魔王'
       mixlevel: 30
+  wand: 'wand'
   #自定义等级列表
   levels:
     level1:
       fullname:
       number: 1
-      maxHealth: 30
+      maxMagic: 80
       particles:
       - HEART
       condition:
@@ -56,9 +59,11 @@ settings:
         items:
         - item1,2
         - bk1,2
+      attributes:
+      - '基础血量: 500'
     level2:
       number: 2
-      maxHealth: 30
+      maxMagic: 100
       particles:
       - FIREWORKS_SPARK
       condition:
@@ -67,8 +72,10 @@ settings:
         items:
         - item1,2
         - bk1,2
+      attributes:
+      - '基础血量: 500'
     level3:
-      maxHealth: 30
+      maxMagic: 120
       number: 3
       particles:
       - FIREWORKS_SPARK
@@ -78,9 +85,11 @@ settings:
         items:
         - item1,2
         - bk1,2
+      attributes:
+      - '基础血量: 500'
     level4:
       number: 4
-      maxHealth: 30
+      maxMagic: 150
       particles:
       - COMPOSTER
       condition:
@@ -89,9 +98,11 @@ settings:
         items:
         - item1,2
         - bk1,2
+      attributes:
+      - '基础血量: 500'
     level5:
       number: 5
-      maxHealth: 30
+      maxMagic: 170
       particles:
       - SMOKE_LARGE
       condition:
@@ -100,9 +111,11 @@ settings:
         items:
         - item1,2
         - bk1,2
+      attributes:
+      - '基础血量: 500'
     level6:
       number: 6
-      maxHealth: 30
+      maxMagic: 200
       particles:
       - CLOUD
       condition:
@@ -111,9 +124,11 @@ settings:
         items:
         - item1,2
         - bk1,2
+      attributes:
+      - '基础血量: 500'
     level7:
       number: 7
-      maxHealth: 30
+      maxMagic: 240
       particles:
       - DRAGON_BREATH
       condition:
@@ -122,9 +137,11 @@ settings:
         items:
         - item1,2
         - bk1,2
+      attributes:
+      - '基础血量: 500'
     level8:
       number: 8
-      maxHealth: 30
+      maxMagic: 280
       particles:
       - DRIP_WATER
       condition:
@@ -133,3 +150,5 @@ settings:
         items:
         - item1,2
         - bk1,2
+      attributes:
+      - '基础血量: 500'

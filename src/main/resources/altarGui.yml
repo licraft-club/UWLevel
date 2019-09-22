@@ -6,7 +6,7 @@ size: 27
 upgrade:
   display: '触发魔法进化'
   lores:
-  - '当前玩家:{player}'
+  - '当前玩家:{ability}'
   - '当前等级:{level}'
   - '================='
   - '下一等级:{nextlevel}'

@@ -1,6 +1,6 @@
 package com.licrafter.mc.level.events;
 
-import com.licrafter.mc.level.models.LevelPlayer;
+import com.licrafter.mc.level.models.config.UserData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -14,12 +14,12 @@ import org.jetbrains.annotations.NotNull;
 public class LevelPlayerLoadedEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    private LevelPlayer levelPlayer;
+    private UserData userData;
     private Player player;
 
-    public LevelPlayerLoadedEvent(Player player, LevelPlayer levelPlayer) {
+    public LevelPlayerLoadedEvent(Player player, UserData levelPlayer) {
         this.player = player;
-        this.levelPlayer = levelPlayer;
+        this.userData = levelPlayer;
     }
 
 
@@ -27,8 +27,8 @@ public class LevelPlayerLoadedEvent extends Event {
         return player;
     }
 
-    public LevelPlayer getLevelPlayer() {
-        return levelPlayer;
+    public UserData getLevelPlayer() {
+        return userData;
     }
 
     @NotNull

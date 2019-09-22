@@ -1,9 +1,8 @@
 package com.licrafter.mc.level.commands
 
 import com.licrafter.lib.log.BLog
-import com.licrafter.mc.level.LevelPlugin
-import com.licrafter.mc.level.db.ExecutorCallback
-import com.licrafter.mc.level.models.LevelPlayer
+import com.licrafter.mc.level.models.LevelManager
+import com.licrafter.mc.level.models.PlayerManager
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -27,30 +26,24 @@ object JoinCmd : LevelCmdInterface {
             sender.sendMessage("请输入正确的等级数字")
             return true
         }
-        val level = LevelPlugin.levelConfig().getLevel(levelNum)
+        val level = LevelManager.config.getLevel(levelNum)
         if (level == null) {
             sender.sendMessage("没有该等级")
             return true
         }
-        val levelPlayer = LevelPlugin.playerManager().getLevelPlayer(sender)
+        val levelPlayer = PlayerManager.getLevelPlayer(sender)
         if (levelPlayer == null) {
             //还未开启魔法升级之路
-            val newLevelPlayer = LevelPlayer(player.uniqueId, player.displayName, levelNum, 0)
-            LevelPlugin.getRepository()?.insertLevelPlayer(newLevelPlayer, object : ExecutorCallback<Boolean>() {
-                override fun callback(value: Boolean) {
-                    if (value) {
-                        sender.sendMessage("加入了职业" + newLevelPlayer.getLevelPrefix()?.fullname)
-                        LevelPlugin.playerManager().addLevelPlayer(newLevelPlayer)
-                    }
-                }
-            })
+            sender.sendMessage("升级成功")
+            PlayerManager.createLevelPlayer(player)
         } else {
             //已经开启了魔法升级
-            val oldLevel = levelPlayer.getLevel()
+            val oldLevel = LevelManager.config.getLevel(levelPlayer.level)
             if (oldLevel?.equals(level) == true) {
                 player.sendMessage("你已经在这个等级了")
             } else {
-
+                levelPlayer.level += 1
+                player.sendMessage("升级成功")
             }
         }
         return true

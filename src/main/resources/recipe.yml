@@ -1,0 +1,9 @@
+wand:
+  material:
+    o: 'item2'
+    i: 'minecraft:STICK'
+  row_1: 'ooo'
+  row_2: 'oio'
+  row_3: 'ooo'
+  result: 'wand'
+

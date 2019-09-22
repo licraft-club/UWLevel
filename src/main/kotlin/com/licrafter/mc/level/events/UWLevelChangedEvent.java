@@ -1,6 +1,6 @@
 package com.licrafter.mc.level.events;
 
-import com.licrafter.mc.level.models.LevelPlayer;
+import com.licrafter.mc.level.models.config.UserData;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -12,13 +12,13 @@ import org.bukkit.event.HandlerList;
 public final class UWLevelChangedEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    private LevelPlayer levelPlayer;
+    private UserData levelPlayer;
 
-    public UWLevelChangedEvent(LevelPlayer player) {
+    public UWLevelChangedEvent(UserData player) {
         levelPlayer = player;
     }
 
-    public LevelPlayer getLevelPlayer() {
+    public UserData getLevelPlayer() {
         return levelPlayer;
     }
 

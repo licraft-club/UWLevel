@@ -1,7 +1,7 @@
 package com.licrafter.mc.level.events;
 
-import com.licrafter.mc.level.models.LevelPlayer;
 import com.licrafter.mc.level.models.config.LevelConfig;
+import com.licrafter.mc.level.models.config.UserData;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -18,10 +18,10 @@ public final class UWLevelUpEvent extends Event implements Cancellable {
 
     private LevelConfig.Level from;
     private LevelConfig.Level to;
-    private LevelPlayer levelPlayer;
+    private UserData userData;
 
-    public UWLevelUpEvent(LevelPlayer player, LevelConfig.Level from, LevelConfig.Level to) {
-        this.levelPlayer = player;
+    public UWLevelUpEvent(UserData player, LevelConfig.Level from, LevelConfig.Level to) {
+        this.userData = player;
         this.from = from;
         this.to = to;
     }

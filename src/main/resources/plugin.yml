@@ -5,7 +5,7 @@ author: shell
 api-version: 1.13
 website: http://mc.licrafter.com
 description: custom rpg level plugin
-depend: [LicraftLib]
+depend: [LicraftLib,Magic]
 softdepend: [SkillAPI]
 commands:
   levels:
@@ -21,7 +21,7 @@ permissions:
     description: Grants access to all admin commands
     default: op
   level.use.*:
-    descroption: Grants access to all player commands
+    descroption: Grants access to all ability commands
     default: true
 
 
