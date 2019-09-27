@@ -21,12 +21,12 @@ class LevelsCommand : CommandExecutor {
         } else if (args[0].equals("particles", ignoreCase = true)) {
             return ParticleCmd.perform(sender, command, label, args)
         } else if (args[0] == "skill") {
-            (sender as Player).inventory.setItemInMainHand(PlayerManager.getLevelPlayer(sender)?.rpgItem?.first())
+            (sender as Player).inventory.setItemInMainHand(PlayerManager.getLevelPlayer(sender)?.rpgRune?.first())
         } else if (args[0] == "save") {
             //LevelPlugin.effectManager().display(Particle.SMOKE_LARGE,)
             val mutableList = ArrayList<ItemStack>()
             mutableList.add((sender as Player).inventory.itemInMainHand)
-            PlayerManager.getLevelPlayer(sender)?.rpgItem = mutableList
+            PlayerManager.getLevelPlayer(sender)?.rpgRune = mutableList
             PlayerManager.savePlayers()
         } else if (args[0] == "give") {
             return ItemCmd.perform(sender, command, label, args)

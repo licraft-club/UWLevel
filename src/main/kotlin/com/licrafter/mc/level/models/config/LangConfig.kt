@@ -11,9 +11,9 @@ import com.licraft.apt.config.ConfigValue
 @ConfigBean
 class LangConfig {
 
-    @ConfigValue(path = "lang.load-config-error", colorChar = '&')
+    @ConfigValue(path = "lang.reload-config-error", colorChar = '&')
     var loadConfigError: String = ""
-    @ConfigValue(path = "lang.no-ability-cache", colorChar = '&')
+    @ConfigValue(path = "lang.no-abilities-cache", colorChar = '&')
     var noPlayerCache: String = ""
     @ConfigValue(path = "mage.exp_earns", colorChar = '&')
     var mageEarnsExp = ""

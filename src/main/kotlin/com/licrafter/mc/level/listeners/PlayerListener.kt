@@ -35,7 +35,7 @@ class PlayerListener : Listener {
         userData?.let {
             val loadEvent = LevelPlayerLoadedEvent(event.player, it)
             Bukkit.getServer().pluginManager.callEvent(loadEvent)
-            BLog.consoleMessage("load success level ability ${userData.displayName}")
+            BLog.consoleMessage("reload success level abilities ${userData.displayName}")
         }
     }
 

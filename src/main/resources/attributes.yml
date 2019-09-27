@@ -8,7 +8,7 @@ nameHealthDisplay:
 holoDamageDisplay:
   format: '&a&o暴击:&b&o+%s'
   duration: 2
-attributes:
+ability:
   Dodge:
     display: '闪避'
   Damage:
@@ -33,3 +33,14 @@ attributes:
     display: '点燃'
   Health:
     display: '血量'
+condition:
+  Level:
+    display: '等级要求'
+  MainHand:
+    display: '主手'
+  OffHand:
+    display: '副手'
+  Armor:
+    display: '护甲'
+  Rune:
+    display: '符文'

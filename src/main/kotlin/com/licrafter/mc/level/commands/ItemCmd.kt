@@ -1,6 +1,6 @@
 package com.licrafter.mc.level.commands
 
-import com.licrafter.mc.level.ItemManager
+import com.licrafter.mc.item.ItemManager
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -13,8 +13,8 @@ import org.bukkit.command.CommandSender
 object ItemCmd : LevelCmdInterface {
     override fun perform(sender: CommandSender, cmd: Command, label: String, args: Array<out String>): Boolean {
         if (args.size < 4) {
-            sender.sendMessage("指令格式 /levels give [ability] [condition] [amount]")
-            sender.sendMessage("指令格式 /levels give [ability] [book|level] [amount]")
+            sender.sendMessage("指令格式 /levels give [abilities] [conditions] [amount]")
+            sender.sendMessage("指令格式 /levels give [abilities] [book|level] [amount]")
             return true
         }
         val targetPlayer = Bukkit.getPlayer(args[1])

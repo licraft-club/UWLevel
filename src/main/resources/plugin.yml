@@ -21,7 +21,7 @@ permissions:
     description: Grants access to all admin commands
     default: op
   level.use.*:
-    descroption: Grants access to all ability commands
+    descroption: Grants access to all abilities commands
     default: true
 
 

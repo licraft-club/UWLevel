@@ -46,9 +46,9 @@ class LevelConfig {
         var maxMagic = 0
         @ConfigValue(path = "particles")
         var particles = arrayListOf<String>()
-        @ConfigSection(path = "condition")
+        @ConfigSection(path = "conditions")
         var condition: Condition? = null
-        @ConfigValue(path = "attributes")
+        @ConfigValue(path = "abilities")
         var attributes = emptyList<String>()
 
         override fun compareTo(other: Level): Int {

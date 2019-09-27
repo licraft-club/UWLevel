@@ -3,7 +3,8 @@ package com.licrafter.mc.level
 import com.licraft.apt.config.ParserAPI
 import com.licraft.apt.utils.YmlMaker
 import com.licrafter.lib.log.BLog
-import com.licrafter.mc.attributes.AttributeManager
+import com.licrafter.mc.attribute.AttributeManager
+import com.licrafter.mc.attribute.ConditionManager
 import com.licrafter.mc.level.commands.LevelsCommand
 import com.licrafter.mc.level.commands.TabComplete
 import com.licrafter.mc.level.listeners.*
@@ -37,6 +38,7 @@ class LevelPlugin : JavaPlugin() {
         effectManager = EffectManager(this)
         RecipeManager.onEnable()
         LevelManager.onEnable(this)
+        ConditionManager.onEnable(this)
         Message.onEnable(this)
         particleManager = ParticleManager()
         AttributeManager.onEnable(this)

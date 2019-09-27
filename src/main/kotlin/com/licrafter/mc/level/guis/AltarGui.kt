@@ -56,7 +56,7 @@ class AltarGui {
             //祭坛默认lores
             defaultLores.forEach {
                 val prefix = LevelManager.config.getLevelPrefix(level)?.fullname
-                lores.add(ChatColor.translateAlternateColorCodes('&', it.replace("{ability}", player.displayName, true).replace("{level}", prefix
+                lores.add(ChatColor.translateAlternateColorCodes('&', it.replace("{abilities}", player.displayName, true).replace("{level}", prefix
                         ?: "", true)))
             }
             //不同等级额外lores

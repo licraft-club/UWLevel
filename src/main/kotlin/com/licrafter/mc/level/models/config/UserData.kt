@@ -24,10 +24,10 @@ class UserData {
     var magicPower = 0
     @ConfigValue(path = "magichealth")
     var magicHealth = 20.0
-    @ConfigSection(path = "attributes")
+    @ConfigSection(path = "abilities")
     var skillMap = hashMapOf<String, SkillData>()
     @ConfigValue(path = "rpgInventory")
-    var rpgItem: List<ItemStack> = emptyList()
+    var rpgRune: List<ItemStack> = emptyList()
 
     class SkillData {
         @ConfigValue(path = "level")

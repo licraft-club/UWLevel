@@ -1,6 +1,6 @@
 package com.licrafter.mc.level.guis
 
-import com.licrafter.mc.level.ItemManager
+import com.licrafter.mc.item.ItemManager
 import com.licrafter.mc.level.models.config.UserData
 import com.licrafter.mc.level.SkillsManager
 import org.bukkit.Bukkit
