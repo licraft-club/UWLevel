@@ -11,11 +11,19 @@ class ArmorBreakRate : IAttribute {
 
     private var armorBreakRate = 0
 
-    override fun parse(lore: String) {
+    override fun merge(lore: String) {
         armorBreakRate += LoresUtil.parseAttrValue(lore)
     }
 
-    override fun getAttrValue(): Int {
+    override fun getValue(): Int {
+        return armorBreakRate
+    }
+
+    override fun getMinValue(): Int {
+        return armorBreakRate
+    }
+
+    override fun getMaxValue(): Int {
         return armorBreakRate
     }
 

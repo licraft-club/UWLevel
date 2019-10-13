@@ -1,7 +1,7 @@
 package com.licrafter.mc.level
 
 import com.licrafter.lib.log.BLog
-import com.licrafter.mc.item.ItemManager
+import com.licrafter.mc.item.ItemCreateHelper
 import com.licrafter.mc.level.models.config.RecipeConfig
 import org.bukkit.NamespacedKey
 import org.bukkit.Bukkit
@@ -29,7 +29,7 @@ object RecipeManager {
 
     private fun injectRecipe(recipeEntry: MutableMap.MutableEntry<String, RecipeConfig.Recipe>): Boolean {
         val materialMap = recipeEntry.value.materials
-        val result = ItemManager.createItem(recipeEntry.value.result) ?: return false
+        val result = ItemCreateHelper.createItem(recipeEntry.value.result) ?: return false
 
         val recipe = ShapedRecipe(NamespacedKey(LevelPlugin.instance(), recipeEntry.key), result)
         recipe.shape(recipeEntry.value.row_1, recipeEntry.value.row_2, recipeEntry.value.row_3)
@@ -42,7 +42,7 @@ object RecipeManager {
                 recipe.setIngredient(entity.key.toCharArray().first(), material)
             } else {
                 //自定义物品
-                val item = ItemManager.createItem(entity.value) ?: return false
+                val item = ItemCreateHelper.createItem(entity.value) ?: return false
                 recipe.setIngredient(entity.key.toCharArray().first(), RecipeChoice.ExactChoice(item))
             }
         }

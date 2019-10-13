@@ -9,7 +9,6 @@ import com.licrafter.mc.level.models.config.UserData
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
 
 /**
  * Created by shell on 2019/9/15.
@@ -19,41 +18,21 @@ import org.bukkit.inventory.ItemStack
 class AttributeData private constructor(private val player: Player) {
 
     private val levelData = PlayerManager.getLevelPlayer(player.uniqueId)
-    private val abilityAttrList = arrayListOf<IAttribute>()
-
-    private lateinit var loadCallback: AttributeLoadCallback
+    private val playerAbilityList = arrayListOf<IAttribute>()
+    private val handWeaponAbilityList = arrayListOf<IAttribute>()
 
     fun reload() {
         //重置所有属性
-        abilityAttrList.forEach {
+        playerAbilityList.forEach {
             it.reset()
-        }
-        //加载双手武器属性
-        val mainHandItem = player.inventory.itemInMainHand
-        if (mainHandItem.type != Material.AIR) {
-            if (loadCallback.onLoadItemAttribute(this, mainHandItem, LoadType.MAIN_HAND)) {
-                mainHandItem.itemMeta?.lore?.forEach {
-                    loadAttribute(it)
-                }
-            }
-        }
-        val offHandItem = player.inventory.itemInMainHand
-        if (offHandItem.type != Material.AIR) {
-            if (loadCallback.onLoadItemAttribute(this, offHandItem, LoadType.OFF_HAND)) {
-                offHandItem.itemMeta?.lore?.forEach {
-                    loadAttribute(it)
-                }
-            }
         }
 
         //加载护甲槽的装备属性
         player.equipment?.armorContents?.filter {
             it != null && it.type != Material.AIR && it.itemMeta?.hasLore() == true
         }?.forEach { armor ->
-            if (loadCallback.onLoadItemAttribute(this, armor, LoadType.ARMOR)) {
-                armor?.itemMeta?.lore?.forEach {
-                    loadAttribute(it)
-                }
+            armor?.itemMeta?.lore?.forEach {
+                loadAttribute(it)
             }
         }
 
@@ -62,10 +41,8 @@ class AttributeData private constructor(private val player: Player) {
             levelData.rpgRune.filter {
                 it.type != Material.AIR && it.itemMeta?.hasLore() == true
             }.forEach { rune ->
-                if (loadCallback.onLoadItemAttribute(this, rune, LoadType.RUNE)) {
-                    rune.itemMeta?.lore?.forEach {
-                        loadAttribute(it)
-                    }
+                rune.itemMeta?.lore?.forEach {
+                    loadAttribute(it)
                 }
             }
 
@@ -79,21 +56,45 @@ class AttributeData private constructor(private val player: Player) {
                 Runnable { Bukkit.getServer().pluginManager.callEvent(PlayerAttributeLoadedEvent(player, levelData, this)) })
     }
 
-    fun reset() {
-        abilityAttrList.forEach { it.reset() }
+    fun resetPlayerAbility() {
+        playerAbilityList.forEach { it.reset() }
+    }
+
+    fun resetHandWeaponAbility() {
+        handWeaponAbilityList.forEach { it.reset() }
+    }
+
+    fun loadHandWeaponAttribute(lore: String) {
+        for (attribute in handWeaponAbilityList) {
+            if (attribute.match(lore)) {
+                attribute.merge(lore)
+            }
+        }
     }
 
     private fun loadAttribute(lore: String) {
-        for (attribute in abilityAttrList) {
+        for (attribute in playerAbilityList) {
             if (attribute.match(lore)) {
-                attribute.parse(lore)
+                attribute.merge(lore)
             }
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getAbility(attrClass: Class<T>): T? {
-        return abilityAttrList.find { it.javaClass.simpleName == attrClass.simpleName } as T?
+    fun <T : IAttribute> getAbility(attrClass: Class<T>): Int {
+        val playerAttrValue = getPlayerBaseAbility(attrClass)?.getValue() ?: 0
+        val weaponAttrValue = getHandWeaponAbility(attrClass)?.getValue() ?: 0
+        return playerAttrValue + weaponAttrValue
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T : IAttribute> getPlayerBaseAbility(attrClass: Class<T>): T? {
+        return playerAbilityList.find { it.javaClass.simpleName == attrClass.simpleName } as T?
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T : IAttribute> getHandWeaponAbility(attrClass: Class<T>): T? {
+        return handWeaponAbilityList.find { it.javaClass.simpleName == attrClass.simpleName } as T?
     }
 
     fun getLevelData(): UserData? {
@@ -109,28 +110,13 @@ class AttributeData private constructor(private val player: Player) {
         private val data = AttributeData(player)
 
         fun withAbility(attribute: IAttribute): Builder {
-            data.abilityAttrList.add(attribute)
-            return this
-        }
-
-        fun withLoadCallback(callback: AttributeLoadCallback): Builder {
-            data.loadCallback = callback
+            data.playerAbilityList.add(attribute)
+            data.handWeaponAbilityList.add(attribute)
             return this
         }
 
         fun build(): AttributeData {
             return data
         }
-    }
-
-    enum class LoadType {
-        MAIN_HAND,
-        OFF_HAND,
-        ARMOR,
-        RUNE
-    }
-
-    interface AttributeLoadCallback {
-        fun onLoadItemAttribute(attributeData: AttributeData, itemStack: ItemStack, loadType: LoadType): Boolean
     }
 }

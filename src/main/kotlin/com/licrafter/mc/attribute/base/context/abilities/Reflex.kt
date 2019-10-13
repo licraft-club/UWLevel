@@ -13,18 +13,26 @@ class Reflex : IAttribute {
     //反射伤害的百分比
     private var reflexRange = Pair(0, 0)
 
-    override fun parse(lore: String) {
+    override fun merge(lore: String) {
         LoresUtil.parseAttrRange(lore)?.let {
             reflexRange = Pair(reflexRange.first + it.first, reflexRange.second + it.second)
         }
     }
 
-    override fun getAttrValue(): Int {
+    override fun getValue(): Int {
         return if (reflexRange.first < reflexRange.second) {
             Random().nextInt(reflexRange.second - reflexRange.first) + reflexRange.first
         } else {
             reflexRange.first
         }
+    }
+
+    override fun getMaxValue(): Int {
+        return reflexRange.second
+    }
+
+    override fun getMinValue(): Int {
+        return reflexRange.first
     }
 
     override fun reset() {

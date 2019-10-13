@@ -10,15 +10,23 @@ import com.licrafter.mc.level.utils.LoresUtil
 class ReflexRate : IAttribute {
     private var reflexRateValue = 0
 
-    override fun parse(lore: String) {
+    override fun merge(lore: String) {
         reflexRateValue += LoresUtil.parseAttrValue(lore)
     }
 
-    override fun getAttrValue(): Int {
+    override fun getValue(): Int {
+        return reflexRateValue
+    }
+
+    override fun getMaxValue(): Int {
+        return reflexRateValue
+    }
+
+    override fun getMinValue(): Int {
         return reflexRateValue
     }
 
     override fun reset() {
-        reflexRateValue  = 0
+        reflexRateValue = 0
     }
 }

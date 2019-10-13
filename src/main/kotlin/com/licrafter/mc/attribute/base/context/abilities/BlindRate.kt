@@ -10,11 +10,19 @@ import com.licrafter.mc.level.utils.LoresUtil
 class BlindRate : IAttribute {
     private var blindRate = 0
 
-    override fun parse(lore: String) {
+    override fun merge(lore: String) {
         blindRate += LoresUtil.parseAttrValue(lore)
     }
 
-    override fun getAttrValue(): Int {
+    override fun getValue(): Int {
+        return blindRate
+    }
+
+    override fun getMaxValue(): Int {
+        return blindRate
+    }
+
+    override fun getMinValue(): Int {
         return blindRate
     }
 

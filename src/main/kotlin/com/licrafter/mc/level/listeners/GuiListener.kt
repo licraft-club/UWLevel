@@ -1,7 +1,7 @@
 package com.licrafter.mc.level.listeners
 
 import com.licrafter.lib.log.BLog
-import com.licrafter.mc.item.ItemManager
+import com.licrafter.mc.item.ItemCreateHelper
 import com.licrafter.mc.level.*
 import com.licrafter.mc.level.events.UWLevelChangedEvent
 import com.licrafter.mc.level.events.UWLevelUpEvent
@@ -135,7 +135,7 @@ class GuiListener : Listener {
         if (item.type == Material.AIR) {
             return
         }
-        val bindSkill = ItemManager.getSkill(item) ?: return
+        val bindSkill = ItemCreateHelper.getSkill(item) ?: return
         SkillsManager.bind(player, bindSkill)
         event.isCancelled = true
         player.closeInventory()

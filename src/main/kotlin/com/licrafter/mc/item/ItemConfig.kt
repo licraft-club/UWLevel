@@ -1,4 +1,4 @@
-package com.licrafter.mc.level.models.config
+package com.licrafter.mc.item
 
 import com.licraft.apt.config.ConfigBean
 import com.licraft.apt.config.ConfigSection
@@ -14,24 +14,18 @@ class ItemConfig {
     @ConfigSection(path = "items")
     var itemMap = HashMap<String, Item>()
 
-    class Item {
-        @ConfigValue(path = "skill")
-        var skill: String? = null
-        @ConfigValue(path = "requestlevel")
-        var requestLevel = 1
-        @ConfigValue(path = "skull-value")
-        var skullValue = ""
+    open class Item {
         @ConfigValue(path = "material")
         var material = ""
         @ConfigValue(path = "display")
         var display = ""
-        @ConfigValue(path = "author")
-        var author = ""
-        @ConfigValue(path = "title")
-        var title = ""
-        @ConfigValue(path = "pages")
-        var pages = arrayListOf<String>()
         @ConfigValue(path = "lores")
         var lores = arrayListOf<String>()
+        @ConfigValue(path = "effects")
+        var effects = arrayListOf<String>()
+        @ConfigSection(path = "persistent-data")
+        var persistentData = hashMapOf<String, String>()
+        @ConfigValue(path = "hide-effect")
+        var hideEffect = false
     }
 }

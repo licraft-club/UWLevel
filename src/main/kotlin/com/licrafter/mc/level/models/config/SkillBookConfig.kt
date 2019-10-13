@@ -9,7 +9,7 @@ import com.licraft.apt.config.ConfigValue
  * <p>
  * Gmail: shellljx@gmail.com
  */
-@ConfigBean(file = "items/skillbooks.yml")
+@ConfigBean(file = "items/books.yml")
 class SkillBookConfig {
 
     @ConfigSection(path = "books")

@@ -10,12 +10,20 @@ import com.licrafter.mc.level.utils.LoresUtil
 class Health : IAttribute {
     private var healthValue = 0
 
-    override fun getAttrValue(): Int {
+    override fun getValue(): Int {
         return healthValue
     }
 
-    override fun parse(lore: String) {
+    override fun merge(lore: String) {
         healthValue += LoresUtil.parseAttrValue(lore)
+    }
+
+    override fun getMaxValue(): Int {
+        return healthValue
+    }
+
+    override fun getMinValue(): Int {
+        return healthValue
     }
 
     override fun reset() {

@@ -1,6 +1,6 @@
 package com.licrafter.mc.level.guis
 
-import com.licrafter.mc.item.ItemManager
+import com.licrafter.mc.item.ItemCreateHelper
 import com.licrafter.mc.level.models.config.UserData
 import com.licrafter.mc.level.SkillsManager
 import org.bukkit.Bukkit
@@ -57,7 +57,7 @@ class SkillSelectGui {
                 ChatColor.translateAlternateColorCodes('&', it)
             }
             itemStack.itemMeta = itemMeta
-            ItemManager.setSkill(itemStack, name)
+            ItemCreateHelper.setSkill(itemStack, name)
             inventory.setItem(slot, itemStack)
             slot++
         }

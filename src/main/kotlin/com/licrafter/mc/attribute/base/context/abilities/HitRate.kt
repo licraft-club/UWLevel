@@ -10,11 +10,19 @@ import com.licrafter.mc.level.utils.LoresUtil
 class HitRate : IAttribute {
     private var hitRate = 0
 
-    override fun parse(lore: String) {
+    override fun merge(lore: String) {
         hitRate += LoresUtil.parseAttrValue(lore)
     }
 
-    override fun getAttrValue(): Int {
+    override fun getValue(): Int {
+        return hitRate
+    }
+
+    override fun getMaxValue(): Int {
+        return hitRate
+    }
+
+    override fun getMinValue(): Int {
         return hitRate
     }
 

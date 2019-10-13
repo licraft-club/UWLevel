@@ -46,7 +46,7 @@ object LoresUtil {
                 pair = Pair(array[0], array[1])
             }
         } catch (e: Exception) {
-            BLog.info(LevelPlugin.instance(), "$lore parse error")
+            BLog.info(LevelPlugin.instance(), "$lore parseVariable error")
         }
         return pair
     }
@@ -61,7 +61,7 @@ object LoresUtil {
                 return array[0]
             }
         } catch (e: Exception) {
-            BLog.info(LevelPlugin.instance(), "$lore parse error")
+            BLog.info(LevelPlugin.instance(), "$lore parseVariable error")
         }
         return 0
     }

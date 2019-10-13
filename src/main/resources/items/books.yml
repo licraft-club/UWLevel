@@ -1,0 +1,16 @@
+material: 'WRITTEN_BOOK'
+lores:
+- '&e技能: &a<%display%>'
+- '&e等级: &a<%level%>'
+- '&e需要玩家等级: &a<%reqlevel%>'
+skills:
+  blast:
+    display: '&a哈哈爆破'
+    levels:
+      lv1:
+        level: 1
+        reqlevel: 1
+      lv2:
+        level: 2
+        reqlevel: 3
+

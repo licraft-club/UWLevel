@@ -13,18 +13,26 @@ class Damage : IAttribute {
 
     private var damgeRange = Pair(0, 0)
 
-    override fun parse(lore: String) {
+    override fun merge(lore: String) {
         LoresUtil.parseAttrRange(lore)?.let {
             damgeRange = Pair(damgeRange.first + it.first, damgeRange.second + it.second)
         }
     }
 
-    override fun getAttrValue(): Int {
+    override fun getValue(): Int {
         return if (damgeRange.first < damgeRange.second) {
             Random().nextInt(damgeRange.second - damgeRange.first) + damgeRange.first
         } else {
             damgeRange.first
         }
+    }
+
+    override fun getMaxValue(): Int {
+        return damgeRange.second
+    }
+
+    override fun getMinValue(): Int {
+        return damgeRange.first
     }
 
     override fun reset() {

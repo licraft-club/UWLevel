@@ -4,7 +4,7 @@ import com.licraft.apt.config.ParserAPI
 import com.licraft.apt.utils.YmlMaker
 import com.licrafter.lib.log.BLog
 import com.licrafter.mc.attribute.AttributeManager
-import com.licrafter.mc.attribute.ConditionManager
+import com.licrafter.mc.item.ItemManager
 import com.licrafter.mc.level.commands.LevelsCommand
 import com.licrafter.mc.level.commands.TabComplete
 import com.licrafter.mc.level.listeners.*
@@ -38,7 +38,7 @@ class LevelPlugin : JavaPlugin() {
         effectManager = EffectManager(this)
         RecipeManager.onEnable()
         LevelManager.onEnable(this)
-        ConditionManager.onEnable(this)
+        ItemManager.onEnable(this)
         Message.onEnable(this)
         particleManager = ParticleManager()
         AttributeManager.onEnable(this)
@@ -52,13 +52,11 @@ class LevelPlugin : JavaPlugin() {
     fun initConfig() {
         try {
             //初始化配置文件
-            val itemConfig = YmlMaker(this, "items/items.yml")
-            itemConfig.saveDefaultConfig()
-            val skillBookConfig = YmlMaker(this, "items/skillbooks.yml")
+            val skillBookConfig = YmlMaker(this, "items/books.yml")
             skillBookConfig.saveDefaultConfig()
             val repiceConfig = YmlMaker(this, "recipe.yml")
             repiceConfig.saveDefaultConfig()
-            val skillbooks = YmlMaker(this, "items/skillbooks.yml")
+            val skillbooks = YmlMaker(this, "items/books.yml")
             skillbooks.saveDefaultConfig()
             val altarGuiConfig = YmlMaker(this, "altarGui.yml")
             altarGuiConfig.saveDefaultConfig()
@@ -70,7 +68,6 @@ class LevelPlugin : JavaPlugin() {
 
         //加载配置文件
 
-        itemConfig = ParserAPI.instance().loadValues(this, ItemConfig::class.java)
         skillBookConfig = ParserAPI.instance().loadValues(this, SkillBookConfig::class.java)
         recipeConfig = ParserAPI.instance().loadValues(this, RecipeConfig::class.java)
         altarGuiConfig = ParserAPI.instance().loadValues(this, AltarGuiConfig::class.java)
@@ -93,7 +90,6 @@ class LevelPlugin : JavaPlugin() {
     }
 
     companion object {
-        private lateinit var itemConfig: ItemConfig
         private lateinit var skillBookConfig: SkillBookConfig
         private lateinit var recipeConfig: RecipeConfig
         private lateinit var particleGuiConfig: ParticleGuiConfig
@@ -101,10 +97,6 @@ class LevelPlugin : JavaPlugin() {
         private lateinit var effectManager: EffectManager
         private lateinit var altarGuiConfig: AltarGuiConfig
         private lateinit var particleManager: ParticleManager
-
-        fun itemConfig(): ItemConfig {
-            return itemConfig
-        }
 
         fun skillBookConfig(): SkillBookConfig {
             return skillBookConfig

@@ -47,7 +47,7 @@ class HealthAdapter : AttributeDefaultAdapter(), Listener {
 
     private fun scalePlayerMaxHealth(player: Player, oldHealth: Double) {
         val attributeData = AttributeManager.mPlayerCache[player.uniqueId] ?: return
-        val maxHealth = attributeData.getAbility(Health::class.java)?.getAttrValue() ?: return
+        val maxHealth = attributeData.getPlayerBaseAbility(Health::class.java)?.getValue() ?: return
         if (maxHealth <= 0) {
             return
         }

@@ -12,11 +12,19 @@ class CritRate : IAttribute {
     //支持范围
     private var critRate = 0
 
-    override fun parse(lore: String) {
+    override fun merge(lore: String) {
         critRate += LoresUtil.parseAttrValue(lore)
     }
 
-    override fun getAttrValue(): Int {
+    override fun getValue(): Int {
+        return critRate
+    }
+
+    override fun getMaxValue(): Int {
+        return critRate
+    }
+
+    override fun getMinValue(): Int {
         return critRate
     }
 

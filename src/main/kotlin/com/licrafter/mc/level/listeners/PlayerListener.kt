@@ -114,6 +114,5 @@ class PlayerListener : Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onLevelSkillFireworkDamage(event: EntityDamageEvent) {
-        System.out.println(event.cause.name)
     }
 }

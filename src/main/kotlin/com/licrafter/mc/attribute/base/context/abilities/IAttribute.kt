@@ -14,9 +14,13 @@ interface IAttribute {
         return lore.contains(config.display, true)
     }
 
-    fun parse(lore: String)
+    fun merge(lore: String)
 
-    fun getAttrValue(): Int
+    fun getValue(): Int
+
+    fun getMinValue(): Int
+
+    fun getMaxValue(): Int
 
     fun reset()
 }

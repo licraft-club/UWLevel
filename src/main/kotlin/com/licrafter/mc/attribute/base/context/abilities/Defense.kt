@@ -12,18 +12,26 @@ class Defense : IAttribute {
 
     private var defenseRange = Pair(0, 0)
 
-    override fun parse(lore: String) {
+    override fun merge(lore: String) {
         LoresUtil.parseAttrRange(lore)?.let {
             defenseRange = defenseRange.copy(it.first + defenseRange.first, it.second + defenseRange.second)
         }
     }
 
-    override fun getAttrValue(): Int {
+    override fun getValue(): Int {
         return if (defenseRange.first < defenseRange.second) {
             Random().nextInt(defenseRange.second - defenseRange.first) + defenseRange.first
         } else {
             defenseRange.first
         }
+    }
+
+    override fun getMaxValue(): Int {
+        return defenseRange.second
+    }
+
+    override fun getMinValue(): Int {
+        return defenseRange.first
     }
 
     override fun reset() {

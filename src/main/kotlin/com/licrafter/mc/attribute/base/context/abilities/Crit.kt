@@ -14,18 +14,26 @@ class Crit : IAttribute {
     //支持范围
     private var critRange = Pair(0, 0)
 
-    override fun parse(lore: String) {
+    override fun merge(lore: String) {
         LoresUtil.parseAttrRange(lore)?.let {
             critRange = Pair(critRange.first + it.first, critRange.second + it.second)
         }
     }
 
-    override fun getAttrValue(): Int {
+    override fun getValue(): Int {
         return if (critRange.first < critRange.second) {
             Random().nextInt(critRange.second - critRange.first) + critRange.first
         } else {
             critRange.first
         }
+    }
+
+    override fun getMaxValue(): Int {
+        return critRange.second
+    }
+
+    override fun getMinValue(): Int {
+        return critRange.first
     }
 
     override fun match(lore: String): Boolean {

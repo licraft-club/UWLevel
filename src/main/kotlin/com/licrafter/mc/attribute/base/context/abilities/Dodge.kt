@@ -12,11 +12,19 @@ class Dodge : IAttribute {
 
     private var dodgeRate = 0
 
-    override fun parse(lore: String) {
+    override fun merge(lore: String) {
         dodgeRate += LoresUtil.parseAttrValue(lore)
     }
 
-    override fun getAttrValue(): Int {
+    override fun getValue(): Int {
+        return dodgeRate
+    }
+
+    override fun getMaxValue(): Int {
+        return dodgeRate
+    }
+
+    override fun getMinValue(): Int {
         return dodgeRate
     }
 

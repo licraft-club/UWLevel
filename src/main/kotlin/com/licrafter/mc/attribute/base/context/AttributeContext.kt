@@ -1,6 +1,7 @@
 package com.licrafter.mc.attribute.base.context
 
 import com.licrafter.mc.attribute.AttributeManager
+import com.licrafter.mc.attribute.base.context.abilities.IAttribute
 import com.licrafter.mc.level.models.Message
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
@@ -18,9 +19,6 @@ class AttributeContext private constructor() {
     lateinit var attacker: Entity
         private set
     lateinit var entity: Entity
-        private set
-
-    var crit = false
         private set
 
     fun getEntityAttrData(): AttributeData? {

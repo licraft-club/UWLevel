@@ -4,7 +4,7 @@ import com.elmakers.mine.bukkit.api.event.CastEvent
 import com.elmakers.mine.bukkit.api.spell.SpellResult
 import com.elmakers.mine.bukkit.utility.CompatibilityUtils
 import com.licrafter.lib.log.BLog
-import com.licrafter.mc.item.ItemManager
+import com.licrafter.mc.item.ItemCreateHelper
 import com.licrafter.mc.level.*
 import com.licrafter.mc.level.guis.SkillSelectGui
 import com.licrafter.mc.level.models.LevelManager
@@ -32,9 +32,9 @@ class PlayerSkillListener : Listener {
             val levelPlayer = PlayerManager.getLevelPlayer(event.player) ?: return
             val handItem = event.player.inventory.itemInMainHand
             Material.COBWEB
-            val id = ItemManager.getId(handItem) ?: return
+            val id = ItemCreateHelper.getId(handItem) ?: return
             if (id == LevelManager.config.wand) {
-                val skillGui = SkillSelectGui().create(levelPlayer, ItemManager.getSkill(handItem)) ?: return
+                val skillGui = SkillSelectGui().create(levelPlayer, ItemCreateHelper.getSkill(handItem)) ?: return
                 event.player.openInventory(skillGui)
             }
         }
@@ -46,9 +46,9 @@ class PlayerSkillListener : Listener {
         if (event.player.isSneaking && (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK) && event.hand == EquipmentSlot.HAND) {
             val skillBook = event.player.inventory.itemInMainHand
             //判断是不是技能书
-            ItemManager.getSkillBookConfig(skillBook) ?: return
-            val requestLevel = ItemManager.getReqLevel(skillBook)
-            val bindSkill = ItemManager.getSkill(skillBook)?.split("|") ?: return
+            ItemCreateHelper.getSkillBookConfig(skillBook) ?: return
+            val requestLevel = ItemCreateHelper.getReqLevel(skillBook)
+            val bindSkill = ItemCreateHelper.getSkill(skillBook)?.split("|") ?: return
             val levelePlayer = PlayerManager.getLevelPlayer(event.player)
             if (levelePlayer == null) {
                 event.player.sendMessage("你还没有开启魔法之路，请去找 利姆露")
@@ -87,14 +87,14 @@ class PlayerSkillListener : Listener {
         //挥舞手臂法杖执行技能
         if (event.action == Action.LEFT_CLICK_AIR || event.action == Action.LEFT_CLICK_BLOCK) {
             val wand = event.player.inventory.itemInMainHand
-            if (ItemManager.getId(wand) == LevelManager.config.wand) {
+            if (ItemCreateHelper.getId(wand) == LevelManager.config.wand) {
                 val levelPlayer = PlayerManager.getLevelPlayer(event.player)
                 if (levelPlayer == null) {
                     event.player.sendMessage("你还没有开启魔法之路")
                     return
                 }
 
-                val bindSkill = ItemManager.getSkill(wand)?.split("|")
+                val bindSkill = ItemCreateHelper.getSkill(wand)?.split("|")
                 if (bindSkill == null || bindSkill.isEmpty()) {
                     event.player.sendMessage("请先右键打开选择技能界面绑定技能")
                     return

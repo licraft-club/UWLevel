@@ -18,7 +18,6 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
-import org.bukkit.inventory.ItemStack
 import java.util.*
 
 /**
@@ -26,7 +25,7 @@ import java.util.*
  * <p>
  * Gmail: shellljx@gmail.com
  */
-object AttributeManager : Listener, AttributeData.AttributeLoadCallback {
+object AttributeManager : Listener {
 
     lateinit var config: AttributeConfig
         private set
@@ -38,6 +37,7 @@ object AttributeManager : Listener, AttributeData.AttributeLoadCallback {
         initConfig(plugin)
         mAttributeRootAdapter = AttributeAdapterFactory.AttributeChainBuilder()
                 .put(AttributeRootAdapter())
+                .put(HandAttrsAdapter()) //检查手持物品lore条件
                 .put(DamageAdapter())   //计算对战双方的闪避可能，伤害值，防御值
                 .put(EffectAdapter())   //计算药水、闪电类属性的发生率
                 .put(HoloAdapter())     //展示一些血条和伤害值
@@ -71,11 +71,6 @@ object AttributeManager : Listener, AttributeData.AttributeLoadCallback {
         asyncReloadPlayerAttrbuts(event.player)
     }
 
-    //判断加载的物品是否符合条件
-    override fun onLoadItemAttribute(attributeData: AttributeData, itemStack: ItemStack, loadType: AttributeData.LoadType): Boolean {
-        return ConditionManager.checkConditions(attributeData, itemStack, loadType)
-    }
-
     private fun asyncReloadPlayerAttrbuts(player: Player) {
         Bukkit.getScheduler().runTaskAsynchronously(LevelPlugin.instance(), Runnable {
             var attributeData = mPlayerCache[player.uniqueId]
@@ -90,7 +85,6 @@ object AttributeManager : Listener, AttributeData.AttributeLoadCallback {
                         .withAbility(Health())
                         .withAbility(BlindRate())
                         .withAbility(FireRate())
-                        .withLoadCallback(this)
                         .build()
                 mPlayerCache[player.uniqueId] = attributeData
             }

@@ -1,5 +1,6 @@
 package com.licrafter.mc.level.guis
 
+import com.licrafter.mc.item.ItemManager
 import com.licrafter.mc.level.models.LevelManager
 import com.licrafter.mc.level.LevelPlugin
 import com.licrafter.mc.level.models.Message
@@ -65,11 +66,11 @@ class AltarGui {
                 lores.add(ChatColor.translateAlternateColorCodes('&', "&b消耗怪物灵魂(击杀): &e$mobkill"))
                 items.forEach {
                     val itemPair = getItemNameAmountPair(it)
-                    val item = LevelPlugin.itemConfig().itemMap[itemPair.first]
+                    val item = ItemManager.itemConfig?.let { it.itemMap[itemPair.first] }
                     item?.apply {
                         lores.add(ChatColor.translateAlternateColorCodes('&', "&b消耗魔法物品: &e$display ${itemPair.second} 个"))
                     } ?: apply {
-                        val book = LevelPlugin.itemConfig().itemMap[itemPair.first]
+                        val book = ItemManager.itemConfig?.let { it.itemMap[itemPair.first] }
                         book?.apply {
                             lores.add(ChatColor.translateAlternateColorCodes('&', "&b消耗魔法书: &e$display ${itemPair.second} 个"))
                         }

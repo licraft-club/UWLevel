@@ -28,7 +28,7 @@ class LevelsCommand : CommandExecutor {
             mutableList.add((sender as Player).inventory.itemInMainHand)
             PlayerManager.getLevelPlayer(sender)?.rpgRune = mutableList
             PlayerManager.savePlayers()
-        } else if (args[0] == "give") {
+        } else if (args[0] == "item" || args[0] == "book") {
             return ItemCmd.perform(sender, command, label, args)
         } else if (args[0] == "bind") {
             return BindCmd.perform(sender, command, label, args)

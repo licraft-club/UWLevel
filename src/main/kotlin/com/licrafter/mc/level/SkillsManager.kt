@@ -2,6 +2,7 @@ package com.licrafter.mc.level
 
 import com.elmakers.mine.bukkit.api.magic.MagicAPI
 import com.licrafter.lib.log.BLog
+import com.licrafter.mc.item.ItemCreateHelper
 import com.licrafter.mc.item.ItemManager
 import com.licrafter.mc.level.models.LevelManager
 import com.licrafter.mc.level.models.PlayerManager
@@ -40,7 +41,7 @@ object SkillsManager {
         if (handItem.type == Material.AIR) {
             return
         }
-        val id = ItemManager.getId(handItem) ?: return
+        val id = ItemCreateHelper.getId(handItem) ?: return
         if (id != LevelManager.config.wand) {
             return
         }
@@ -52,9 +53,9 @@ object SkillsManager {
             player.sendMessage("无此技能")
             return
         }
-        val config = LevelPlugin.itemConfig().itemMap[id] ?: return
+        val config = ItemManager.itemConfig?.let { it.itemMap[id] } ?: return
         val itemMeta = handItem.itemMeta ?: return
-        val bindSkill = "&b${skillTemp.name} ${ItemManager.getRomanValue(skillLevel.level)}"
+        val bindSkill = "&b${skillTemp.name} ${ItemCreateHelper.getRomanValue(skillLevel.level)}"
         itemMeta.lore = config.lores.map {
             if (it.contains("技能:")) {
                 ChatColor.translateAlternateColorCodes('&', "&e技能: $bindSkill")
@@ -63,7 +64,7 @@ object SkillsManager {
             }
         }
         handItem.itemMeta = itemMeta
-        ItemManager.setSkill(handItem, skill)
+        ItemCreateHelper.setSkill(handItem, skill)
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "成功绑定了技能: $bindSkill"))
     }
 

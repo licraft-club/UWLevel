@@ -11,11 +11,19 @@ class FireRate : IAttribute {
 
     private var fireRateValue = 0
 
-    override fun parse(lore: String) {
+    override fun merge(lore: String) {
         fireRateValue += LoresUtil.parseAttrValue(lore)
     }
 
-    override fun getAttrValue(): Int {
+    override fun getValue(): Int {
+        return fireRateValue
+    }
+
+    override fun getMaxValue(): Int {
+        return fireRateValue
+    }
+
+    override fun getMinValue(): Int {
         return fireRateValue
     }
 

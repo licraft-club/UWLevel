@@ -1,6 +1,6 @@
 package com.licrafter.mc.level.commands
 
-import com.licrafter.mc.item.ItemManager
+import com.licrafter.mc.item.ItemCreateHelper
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -13,8 +13,8 @@ import org.bukkit.command.CommandSender
 object ItemCmd : LevelCmdInterface {
     override fun perform(sender: CommandSender, cmd: Command, label: String, args: Array<out String>): Boolean {
         if (args.size < 4) {
-            sender.sendMessage("指令格式 /levels give [abilities] [conditions] [amount]")
-            sender.sendMessage("指令格式 /levels give [abilities] [book|level] [amount]")
+            sender.sendMessage("指令格式 /levels item [player] [id] [amount]")
+            sender.sendMessage("指令格式 /levels book [player] [id] [level] [amount]")
             return true
         }
         val targetPlayer = Bukkit.getPlayer(args[1])
@@ -22,18 +22,11 @@ object ItemCmd : LevelCmdInterface {
             sender.sendMessage("该玩家不在线或者不存在")
             return true
         }
-        val amount = try {
-            args[3].toInt()
-        } catch (e: Exception) {
-            1
-        }
-        val array = args[2].split("|")
-        val item = if (array.size > 1) {
-            val book = array[0]
-            val level = array[1].toInt()
-            ItemManager.createSkillBook(book, level, amount)
+
+        val item = if (args[0] == "book") {
+            ItemCreateHelper.createSkillBookV2(args[2], args[3], args[4].toInt())
         } else {
-            ItemManager.createItem(array[0], amount)
+            ItemCreateHelper.createItem(args[2], args[3].toInt())
         }
         if (item == null) {
             sender.sendMessage("没有该物品，请检查配置文件")

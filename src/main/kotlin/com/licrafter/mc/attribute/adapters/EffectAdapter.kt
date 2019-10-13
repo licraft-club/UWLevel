@@ -22,8 +22,8 @@ class EffectAdapter : AttributeDefaultAdapter() {
         val entity = getContext()?.entity ?: return false
 
         //计算点燃
-        val fireRateAttr = getContext()?.getAttackerAttrData()?.getAbility(FireRate::class.java)
-        if (fireRateAttr != null && Random().nextInt(100) < fireRateAttr.getAttrValue()) {
+        val fireRateAttr = getContext()?.getAttackerAttrData()?.getAbility(FireRate::class.java)?:0
+        if (fireRateAttr != 0 && Random().nextInt(100) < fireRateAttr) {
             entity.fireTicks = 100
         }
 
@@ -32,8 +32,8 @@ class EffectAdapter : AttributeDefaultAdapter() {
         }
 
         //失明
-        val blindRateAttr = getContext()?.getAttackerAttrData()?.getAbility(BlindRate::class.java)
-        if (blindRateAttr != null && Random().nextInt(100) < blindRateAttr.getAttrValue()) {
+        val blindRateAttr = getContext()?.getAttackerAttrData()?.getAbility(BlindRate::class.java)?:0
+        if (blindRateAttr != 0 && Random().nextInt(100) < blindRateAttr) {
             addPotionEffect(entity, PotionEffectType.BLINDNESS)
         }
         return super.onIntercept()
